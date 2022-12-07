@@ -2,29 +2,25 @@
 <html>
 <head>
     <link rel="stylesheet" href="styles.css">
-    <script>
-        var siteurl = "https://jaytheredpan.github.io/SV_CompareApp"
-    </script>
+    <script src="/script.js"></script>
 </head>
 <body>
 
     <div class="selectdiv">
         <label>
-            <select name="character1" id="char1select" onchange="document.getElementById('char1img').src =
-            this.options[this.selectedIndex].value;">
-                <option value="{{siteurl}}/Images/Jay.PNG">Jay</option>
-                <option value="{{siteurl}}/Images/Maou.PNG">Maou</option>
-                <option value="{{siteurl}}/Images/Missy.PNG">Missy</option>
+            <select name="character1" id="char1select" onchange=updateImg1()>
+                <option value="/Images/Jay.PNG">Jay</option>
+                <option value="/Images/Maou.PNG">Maou</option>
+                <option value="/Images/Missy.PNG">Missy</option>
             </select>
         </label>
     </div>
     <div class="selectdiv">
         <label>
-            <select name="character2" id="char2select" onchange="document.getElementById('char2img').src =
-            this.options[this.selectedIndex].value;">
-                <option value="{{siteurl}}/Images/Jay.PNG">Jay</option>
-                <option value="{{siteurl}}/Images/Maou.PNG">Maou</option>
-                <option value="{{siteurl}}/Images/Missy.PNG">Missy</option>
+            <select name="character2" id="char2select" onchange=updateImg2()>
+                <option value="/Images/Jay.PNG">Jay</option>
+                <option value="/Images/Maou.PNG">Maou</option>
+                <option value="/Images/Missy.PNG">Missy</option>
             </select>
         </label>
     </div>
