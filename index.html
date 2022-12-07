@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="selectdiv">
+        <label>
+            <select name="character1" id="char1select" onchange="document.getElementById('char1img').src =
+            this.options[this.selectedIndex].value;">
+                <option value="/Images/Jay.PNG">Jay</option>
+                <option value="/Images/Maou.PNG">Maou</option>
+                <option value="/Images/Missy.PNG">Missy</option>
+            </select>
+        </label>
+    </div>
+    <div class="selectdiv">
+        <label>
+            <select name="character2" id="char2select" onchange="document.getElementById('char2img').src =
+            this.options[this.selectedIndex].value;">
+                <option value="/Images/Jay.PNG">Jay</option>
+                <option value="/Images/Maou.PNG">Maou</option>
+                <option value="/Images/Missy.PNG">Missy</option>
+            </select>
+        </label>
+    </div>
+
+    <img src="/Images/Jay.PNG" alt="Character 1" id="char1img">
+    <img src="/Images/Jay.PNG" alt="Character 2" id="char2img">
+
+</body>
+
+</html>
