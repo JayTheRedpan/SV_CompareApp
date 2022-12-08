@@ -95,8 +95,9 @@
     {
         "name": "jenny",
         "species": "bunny",
-        "height": 139,
-        "length": 24
+        "height": 70,
+        "length": 24,
+        "notes": "actual size 139, she is seated in pic (50%)"
     },
     {
         "name": "anna",
