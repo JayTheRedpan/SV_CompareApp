@@ -1,5 +1,4 @@
- var charScaler = 5;
- 
+
 //on page load
 window.onload = function() {
     loadCharacters();
