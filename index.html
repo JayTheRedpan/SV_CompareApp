@@ -2,17 +2,17 @@
 <html>
 <head>
     <link rel="stylesheet" href="styles.css">
-    <script>
+    <script src="./script.js">
         //var siteurl = "https://jaytheredpan.github.io/SV_CompareApp/";
-        var siteurl = "./";
+        //var siteurl = "./";
 
-        function updateImg1(){
-            document.getElementById('char1img').src = siteurl + "Images/" + document.getElementById('char1select').value;
-        }
+        //function updateImg1(){
+        //    document.getElementById('char1img').src = siteurl + "Images/" + document.getElementById('char1select').value;
+        //}
 
-        function updateImg2(){
-            document.getElementById('char2img').src = siteurl + "Images/" + document.getElementById('char2select').value;
-        }
+        //function updateImg2(){
+        //    document.getElementById('char2img').src = siteurl + "Images/" + document.getElementById('char2select').value;
+        //}
     </script>
 </head>
 <body>
@@ -20,7 +20,7 @@
     <div class="selectdiv">
         <label>
             <select name="character1" id="char1select" onchange=updateImg1()>
-                <option value="" selected="selected" disabled="disabled">Select a Character</option>
+                <option value="" selected="selected" disabled="disabled">Select a Character2</option>
                 <option value="Jay.PNG">Jay</option>
                 <option value="Maou.PNG">Maou</option>
                 <option value="Missy.PNG">Missy</option>
@@ -30,7 +30,7 @@
     <div class="selectdiv">
         <label>
             <select name="character2" id="char2select" onchange=updateImg2()>
-                <option value="" selected="selected" disabled="disabled">Select a Character</option>
+                <option value="" selected="selected" disabled="disabled">Select a Character2</option>
                 <option value="Jay.PNG">Jay</option>
                 <option value="Maou.PNG">Maou</option>
                 <option value="Missy.PNG">Missy</option>
