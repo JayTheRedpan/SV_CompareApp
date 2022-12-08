@@ -16,5 +16,255 @@
         "species": "snow leopard",
         "height": 94,
         "length": 27
+    },
+    {
+        "name": "sandy",
+        "species": "fennec fox",
+        "height": 55,
+        "length": 54,
+        "notes": "actual size 110, she is seated in pic (50%)"
+    },
+    {
+        "name": "lucile",
+        "species": "skunk",
+        "height": 111,
+        "length": 39
+    },
+    {
+        "name": "popo",
+        "species": "bunny",
+        "height": 114,
+        "length": 36
+    },
+    {
+        "name": "juxta",
+        "species": "bunny",
+        "height": 114,
+        "length": 36
+    },
+    {
+        "name": "hydey",
+        "species": "bunny",
+        "height": 116,
+        "length": 40
+    },
+    {
+        "name": "leona",
+        "species": "bunny lion hybrid",
+        "height": 121,
+        "length": 52
+    },
+    {
+        "name": "hazel",
+        "species": "squirrel",
+        "height": 124,
+        "length": 48
+    },
+    {
+        "name": "marian",
+        "species": "african wild dog",
+        "height": 124,
+        "length": 41
+    },
+    {
+        "name": "sisi",
+        "species": "I forget...",
+        "height": 63,
+        "length": 76,
+        "notes": "actual size 126, she is seated in pic (50%)"
+    },
+    {
+        "name": "brandy",
+        "species": "golden retriever",
+        "height": 99,
+        "length": 36,
+        "notes": "actual size 132, she is kneeling in pic (75%)"
+    },
+    {
+        "name": "sin",
+        "species": "bunny",
+        "height": 134,
+        "length": 72
+    },
+    {
+        "name": "rhonda",
+        "species": "elephant",
+        "height": 137,
+        "length": 73
+    },
+    {
+        "name": "anna",
+        "species": "hyena",
+        "height": 108,
+        "length": 85,
+        "notes": "actual size 144, she is kneeling in pic (75%)"
+    },
+    {
+        "name": "bailly",
+        "species": "bunny",
+        "height": 109,
+        "length": 56,
+        "notes": "actual size 145, she is seated in pic (75%)"
+    },
+    {
+        "name": "lady",
+        "species": "border collie",
+        "height": 148,
+        "length": 52
+    },
+    {
+        "name": "libby",
+        "species": "raccoon",
+        "height": 156,
+        "length": 53
+    },
+    {
+        "name": "fera",
+        "species": "fox",
+        "height": 169,
+        "length": 60
+    },
+    {
+        "name": "tita",
+        "species": "deer",
+        "height": 174,
+        "length": 84
+    },
+    {
+        "name": "contra",
+        "species": "house cat",
+        "height": 180,
+        "length": 60
+    },
+    {
+        "name": "joy",
+        "species": "red panda",
+        "height": 180,
+        "length": 49
+    },
+    {
+        "name": "veronica",
+        "species": "cheetah",
+        "height": 180,
+        "length": 38
+    },
+    {
+        "name": "zuzu",
+        "species": "wolf",
+        "height": 45,
+        "length": 66,
+        "notes": "actual size 180, she is on all fours in pic (25%)"
+    },
+    {
+        "name": "meg",
+        "species": "great white shark",
+        "height": 183,
+        "length": 68
+    },
+    {
+        "name": "dominika",
+        "species": "black bear",
+        "height": 129,
+        "length": 110,
+        "notes": "actual size 184, she is crouched in pic (70%)"
+    },
+    {
+        "name": "becka",
+        "species": "lion",
+        "height": 192,
+        "length": 68
+    },
+    {
+        "name": "bella",
+        "species": "lion",
+        "height": 192,
+        "length": 68
+    },
+    {
+        "name": "hannah",
+        "species": "kangaroo",
+        "height": 135,
+        "length": 140,
+        "notes": "actual size 192, she is crouched in pic (70%)"
+    },
+    {
+        "name": "daisy",
+        "species": "cow",
+        "height": 102,
+        "length": 129,
+        "notes": "actual size 204, she is bent over in pic (50%)"
+    },
+    {
+        "name": "tonya",
+        "species": "tiger",
+        "height": 204,
+        "length": 88
+    },
+    {
+        "name": "autumn",
+        "species": "horse",
+        "height": 173,
+        "length": 131,
+        "notes": "actual size 206, she is hunched over in pic (80%)"
+    },
+    {
+        "name": "kel",
+        "species": "red panda",
+        "height": 216,
+        "length": 98
+    },
+    {
+        "name": "vex",
+        "species": "sabertooth",
+        "height": 217,
+        "length": 49
+    },
+    {
+        "name": "mini",
+        "species": "mouse",
+        "height": 546,
+        "length": 180,
+        "notes": "actual size 1092, she is seated in pic (50%)"
+    },
+    {
+        "name": "usiku",
+        "species": "jackal",
+        "height": 900,
+        "length": 140,
+        "notes": "actual size 1200, she is kneeling in pic (75%)"
+    },
+    {
+        "name": "lucy",
+        "species": "ram",
+        "height": 416,
+        "length": 163,
+        "notes": "actual size 1260, she is seated in pic (30%)"
+    },
+    {
+        "name": "gina",
+        "species": "giraffe",
+        "height": 975,
+        "length": 219,
+        "notes": "actual size 1392, she is kneeling in pic (70%)"
+    },
+    {
+        "name": "xena",
+        "species": "t-rex",
+        "height": 1500,
+        "length": 156
+    },
+    {
+        "name": "ira",
+        "species": "blue jay",
+        "height": 1350,
+        "length": 744,
+        "notes": "actual size 1800, she is kneeling in pic (75%)"
+    },
+    {
+        "name": "prima",
+        "species": "pine martin",
+        "height": 1200,
+        "length": 360,
+        "notes": "actual size 2400, she is crouched in pic (50%)"
     }
 ]
