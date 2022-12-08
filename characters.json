@@ -93,6 +93,12 @@
         "length": 73
     },
     {
+        "name": "jenny",
+        "species": "bunny",
+        "height": 139,
+        "length": 24
+    },
+    {
         "name": "anna",
         "species": "hyena",
         "height": 108,
