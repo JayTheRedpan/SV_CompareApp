@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="styles.css">
-    <script src="./script.js">
-        //var siteurl = "https://jaytheredpan.github.io/SV_CompareApp/";
-        //var siteurl = "./";
-
-        //function updateImg1(){
-        //    document.getElementById('char1img').src = siteurl + "Images/" + document.getElementById('char1select').value;
-        //}
-
-        //function updateImg2(){
-        //    document.getElementById('char2img').src = siteurl + "Images/" + document.getElementById('char2select').value;
-        //}
-    </script>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./script.js"></script>
 </head>
 <body>
 
     <div class="selectdiv">
         <label>
-            <select name="character1" id="char1select" onchange=updateImg1()>
-                <option value="" selected="selected" disabled="disabled">Select a Character2</option>
-                <option value="Jay.PNG">Jay</option>
-                <option value="Maou.PNG">Maou</option>
-                <option value="Missy.PNG">Missy</option>
+            <select name="character1" id="char1select" onchange=updateChar1()>
+                <option value="" selected="selected" disabled="disabled">Select a Character</option>
+                <option value="jay">Jay</option>
+                <option value="maou">Maou</option>
+                <option value="missy">Missy</option>
             </select>
         </label>
     </div>
     <div class="selectdiv">
         <label>
-            <select name="character2" id="char2select" onchange=updateImg2()>
-                <option value="" selected="selected" disabled="disabled">Select a Character2</option>
-                <option value="Jay.PNG">Jay</option>
-                <option value="Maou.PNG">Maou</option>
-                <option value="Missy.PNG">Missy</option>
+            <select name="character2" id="char2select" onchange=updateChar2()>
+                <option value="" selected="selected" disabled="disabled">Select a Character</option>
+                <option value="jay">Jay</option>
+                <option value="maou">Maou</option>
+                <option value="missy">Missy</option>
             </select>
         </label>
     </div>
 
-    <img src="" alt="Character 1" id="char1img">
-    <img src="" alt="Character 2" id="char2img">
+    <div class="profileImages">
+        <img src="" alt="Character 1" id="profile1img">
+        <img src="" alt="Character 2" id="profile2img">
+    </div>
+
+    <div class="refImages">
+        <img src="" alt="Character 1" id="ref1img">
+        <img src="" alt="Character 2" id="ref2img">
+    </div>
+
+    <div class="profiles">
+
+    </div>
 
 </body>
 

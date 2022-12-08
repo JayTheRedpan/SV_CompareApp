@@ -1,0 +1,20 @@
+[
+    {
+        "name": "jay",
+        "species": "red panda",
+        "height": 67,
+        "length": 5
+    },
+    {
+        "name": "maou",
+        "species": "hyena",
+        "height": 68,
+        "length": 7
+    },
+    {
+        "name": "missy",
+        "species": "snow leopard",
+        "height": 94,
+        "length": 27
+    }
+]
