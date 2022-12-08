@@ -1,5 +1,10 @@
- const charSize = 1;
+ var charScaler = 5;
  
+//on page load
+window.onload = function() {
+    loadCharacters();
+  };
+
  //pull all character data from characters json
 async function getCharData() {
     const response = await fetch('./characters.json');
@@ -7,10 +12,23 @@ async function getCharData() {
     return response.json();
 }
 
-//on page load
-window.onload = function() {
-    loadCharacters();
-  };
+//gets specific character data based on name
+async function getChar(charName){
+    const characters = await getCharData();
+    var charData
+
+    //search through character json for selected character
+    for (var i=0 ; i < characters.length ; i++)
+    {
+        if (characters[i]["name"] == charName) {
+            charData = characters[i];
+        }
+    }
+
+    console.log(charData);
+
+    return charData;
+}
 
 //update drop downs with characters from json
 async function loadCharacters(){
@@ -32,24 +50,66 @@ async function loadCharacters(){
     }
 }
 
+//scale characters based off of largest
+async function sizeScale(){
+    var char1 = await getChar(document.getElementById('char1select').value);
+    var char2 = await getChar(document.getElementById('char2select').value);
+
+    var maxSize = 0;
+
+    //find larger characters height
+    try{
+        if ((char1.height * char1.height_correction) > (char2.height * char2.height_correction)){
+            maxSize = (char1.height * char1.height_correction);
+        }
+        else{
+            maxSize = (char2.height * char2.height_correction);
+        }
+    }
+    catch{
+        maxSize = 0
+    }
+
+    //adjust charactrs based off of bigger character height
+    var ref1Img = document.getElementById('ref1img');
+    var ref2Img = document.getElementById('ref2img');
+
+    if (maxSize >= 500){
+        var sizeScalar = 0.5;
+        ref1Img.style.height = (sizeScalar * (char1.height_correction * char1.height)) + 'px';
+        ref2Img.style.height = (sizeScalar * (char2.height_correction * char2.height)) + 'px';
+        console.log("Scaled by: " + sizeScalar);
+    }
+    else if (maxSize >= 200){
+        var sizeScalar = 3;
+        ref1Img.style.height = (sizeScalar * (char1.height_correction * char1.height)) + 'px';
+        ref2Img.style.height = (sizeScalar * (char2.height_correction * char2.height)) + 'px';
+        console.log("Scaled by: " + sizeScalar);
+    }
+    else if (maxSize >= 100){
+        var sizeScalar = 6;
+        ref1Img.style.height = (sizeScalar * (char1.height_correction * char1.height)) + 'px';
+        ref2Img.style.height = (sizeScalar * (char2.height_correction * char2.height)) + 'px';
+        console.log("Scaled by: " + sizeScalar);
+    }
+    else{
+        var sizeScalar = 8;
+        ref1Img.style.height = (sizeScalar * (char1.height_correction * char1.height)) + 'px';
+        ref2Img.style.height = (sizeScalar * (char2.height_correction * char2.height)) + 'px';
+        console.log("Scaled by: " + sizeScalar);
+    }
+
+}
+
 //updates character 1 after a selection is made
 async function updateChar1(){
     //variable declaration
     var charName = document.getElementById('char1select').value;
     const characters = await getCharData();
-    var charData;
+    var charData = await getChar(charName);
 
     var profileImg = document.getElementById('profile1img');
     var refImg = document.getElementById('ref1img');
-
-    //search through character json for selected character
-    for (var i=0 ; i < characters.length ; i++)
-    {
-        if (characters[i]["name"] == charName) {
-            charData = characters[i];
-        }
-    }
-    console.log(charData);
     
     //update profile images and size according to character size
     profileImg.src = "./images/head/" + charName + ".png";
@@ -57,8 +117,9 @@ async function updateChar1(){
 
     //update ref images and size according to character size
     refImg.src = "./images/ref/" + charName + ".png";
-    refImg.style.height = (document.getElementById('sizeselect').value * charData.height) + 'px';
 
+    //scale pics
+    await sizeScale();
 }
 
 //updates character 2 after a selection is made
@@ -66,19 +127,10 @@ async function updateChar2(){
     //variable declaration
     var charName = document.getElementById('char2select').value;
     const characters = await getCharData();
-    var charData;
+    var charData = await getChar(charName);
 
     var profileImg = document.getElementById('profile2img');
     var refImg = document.getElementById('ref2img');
-
-    //search through character json for selected character
-    for (var i=0 ; i < characters.length ; i++)
-    {
-        if (characters[i]["name"] == charName) {
-            charData = characters[i];
-        }
-    }
-    console.log(charData);
     
     //update profile images and size according to character size
     profileImg.src = "./images/head/" + charName + ".png";
@@ -86,6 +138,7 @@ async function updateChar2(){
 
     //update ref images and size according to character size
     refImg.src = "./images/ref/" + charName + ".png";
-    refImg.style.height = (document.getElementById('sizeselect').value * charData.height) + 'px';
 
+    //scale pics
+    await sizeScale();
 }
