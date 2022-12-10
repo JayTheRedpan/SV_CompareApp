@@ -13,6 +13,7 @@
         <select name="character2" id="char2select" onchange=updateChar2()>
             <option value="" selected="selected" disabled="disabled">Select a Character</option>
         </select>
+        <button id="swapButton" onclick="swapChars()"><i class='fa fa-refresh' style="font-size:35px;"></i></i></button>
     </div>
     
     <div class="tabButtons">
@@ -24,32 +25,29 @@
     <div class="tabs">
 
         <div class="tab" id="heightTab">
+            <input type="range" min="0.5" max = 10.5 value="1" id="scaleRange" onchange="adjustScale()">
             <table>
-                <tr>
-                    <div class="statsdiv" >
-                        <td>
-                            <div class="statblock">
-                                <h2 id="char1Name"></h2>
-                                <h3 id="char1Height"></h3>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="statblock">
-                                <h2 id="char2Name"></h2>
-                                <h3 id="char2Height"></h3>
-                            </div>
-                        </td>
-                    </div>
+                <colgroup>
+                    <col span="1" style="width: 50%;" id="char1HeightCol">
+                    <col span="1" style="width: 50%;" id="char2HeightCol">
+                 </colgroup>
+                <tr class="statblocks">
+                    <td class="statblock">
+                        <h2 id="char1Name"></h2>
+                        <h3 id="char1Height"></h3>
+                    </td>
+                    <td class="statblock">
+                        <h2 id="char2Name"></h2>
+                        <h3 id="char2Height"></h3>
+                    </td>
                 </tr>
-                <tr>
-                    <div class="heightImages">
-                        <td id="height1ImgCell">
-                            <img src="./images/site/blank.png" alt="Character 1" id="height1Img">
-                        </td>
-                        <td id="height2ImgCell">
-                            <img src="./images/site/blank.png" alt="Character 2" id="height2Img">
-                        </td>
-                    </div>
+                <tr class="heightImages">
+                    <td id="height1ImgCell">
+                        <img src="./images/site/blank.png" alt="Character 1" id="height1Img">
+                    </td>
+                    <td id="height2ImgCell">
+                        <img src="./images/site/blank.png" alt="Character 2" id="height2Img">
+                    </td>
                 </tr>
             </table>
         </div>

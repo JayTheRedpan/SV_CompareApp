@@ -99,8 +99,24 @@ async function sizeScale(){
     else if (maxSize >= 100){sizeScalar = 6;}
     else{sizeScalar = 8;}
 
+    document.getElementById('scaleRange').value = sizeScalar;
     height1img.style.height = (sizeScalar * char1Height) + 'px';
     height2img.style.height = (sizeScalar * char2Height) + 'px';
+
+    //Adjust columsn based on smaller characters width
+    // if (height1img.width < height2img.width){
+    //     document.getElementById('char1HeightCol').style.width = (height1img.width + 20) + 'px';
+    //     document.getElementById('char2HeightCol').style.width = '';
+    //     console.log('set to char 1 width');
+    // }else if (height1img.width > height2img.width){
+    //     document.getElementById('char2HeightCol').style.width = (height2img.width + 20)+ 'px';
+    //     document.getElementById('char1HeightCol').style.width = '';
+    //     console.log('set to char 2 width');
+    // } else {
+    //     document.getElementById('char1HeightCol').style.width = '50%';
+    //     document.getElementById('char2HeightCol').style.width = '50%';
+    // }
+
     console.log("Scaled by: " + sizeScalar);
 
 }
@@ -198,6 +214,43 @@ function openCustomTab(){
     document.getElementById('lengthButton').style.color = '#000';
     document.getElementById('profileButton').style.color = '#000';
     document.getElementById('customButton').style.color = 'blue';
+}
+
+async function adjustScale(){
+    var char1 = await getChar(document.getElementById('char1select').value, false);
+    var char2 = await getChar(document.getElementById('char2select').value, false);
+    var char1Height = 0;
+    var char2Height = 0;
+
+    try{
+        char1Height = char1.height * char1.height_correction;
+    }catch{
+
+    }
+    try{
+        char2Height = char2.height * char2.height_correction;
+    }catch{
+
+    }
+    var height1img = document.getElementById('height1Img');
+    var height2img = document.getElementById('height2Img');
+    var sizeScalar;
+
+    sizeScalar = document.getElementById('scaleRange').value;
+    height1img.style.height = (sizeScalar * char1Height) + 'px';
+    height2img.style.height = (sizeScalar * char2Height) + 'px';
+
+    console.log('Scaled by: ' + sizeScalar);
+}
+
+function swapChars(){
+    var char1 = document.getElementById('char1select').value;
+
+    document.getElementById('char1select').value = document.getElementById('char2select').value;
+    document.getElementById('char2select').value = char1;
+
+    updateChar1();
+    updateChar2();
 }
 
 //Tool Functions
