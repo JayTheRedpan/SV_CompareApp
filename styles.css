@@ -2,14 +2,22 @@ body{
     background-color: antiquewhite;
 }
 
+.statsdiv,
 .refImages,
 .selectdiv{
-    white-space: nowrap;
+    display: flex;
+    flex-direction: row;
 }
 
-select,
+.statblock{
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}
+
+
 img{
-    display: inlie-block;
+    align-self: flex-end;
 }
 
 .profileImages{

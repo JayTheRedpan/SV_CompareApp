@@ -1,8 +1,4 @@
-
-//on page load
-window.onload = function() {
-    loadCharacters();
-  };
+ 
 
  //pull all character data from characters json
 async function getCharData() {
@@ -74,7 +70,7 @@ async function sizeScale(){
     var ref2Img = document.getElementById('ref2img');
 
     if (maxSize >= 500){
-        var sizeScalar = 0.5;
+        var sizeScalar = 1;
         ref1Img.style.height = (sizeScalar * (char1.height_correction * char1.height)) + 'px';
         ref2Img.style.height = (sizeScalar * (char2.height_correction * char2.height)) + 'px';
         console.log("Scaled by: " + sizeScalar);
@@ -112,7 +108,9 @@ async function updateChar1(){
     
     //update profile images and size according to character size
     profileImg.src = "./images/head/" + charName + ".png";
-    //profileImg.style.width = 
+    document.getElementById('char1Name').innerHTML = charName[0].toUpperCase() + charName.substring(1);
+    document.getElementById('char1Height').innerHTML = Math.floor(charData.height/12) + "' ";
+    document.getElementById('char1Height').innerHTML += charData.height % 12 + '"';
 
     //update ref images and size according to character size
     refImg.src = "./images/ref/" + charName + ".png";
@@ -133,7 +131,9 @@ async function updateChar2(){
     
     //update profile images and size according to character size
     profileImg.src = "./images/head/" + charName + ".png";
-    //profileImg.style.width = 
+    document.getElementById('char2Name').innerHTML = charName[0].toUpperCase() + charName.substring(1);
+    document.getElementById('char2Height').innerHTML = Math.floor(charData.height/12) + "' ";
+    document.getElementById('char2Height').innerHTML += charData.height % 12 + '"';
 
     //update ref images and size according to character size
     refImg.src = "./images/ref/" + charName + ".png";
@@ -141,3 +141,5 @@ async function updateChar2(){
     //scale pics
     await sizeScale();
 }
+
+loadCharacters();

@@ -26,7 +26,7 @@
     {
         "name": "sandy",
         "species": "fennec fox",
-        "height": 110,
+        "height": 240,
         "ref_height": 110,
         "height_correction": 0.5,
         "length": 54,
@@ -35,7 +35,7 @@
     {
         "name": "lucile",
         "species": "skunk",
-        "height": 111,
+        "height": 100,
         "ref_height": 111,
         "height_correction": 1,
         "length": 39
@@ -59,7 +59,7 @@
     {
         "name": "hydey",
         "species": "bunny",
-        "height": 116,
+        "height": 100,
         "ref_height": 116,
         "height_correction": 1,
         "length": 40
@@ -67,7 +67,7 @@
     {
         "name": "leona",
         "species": "bunny lion hybrid",
-        "height": 121,
+        "height": 162,
         "ref_height": 121,
         "height_correction": 1,
         "length": 52
@@ -83,7 +83,7 @@
     {
         "name": "marian",
         "species": "african wild dog",
-        "height": 124,
+        "height": 90,
         "ref_height": 124,
         "height_correction": 1,
         "length": 41
@@ -91,7 +91,7 @@
     {
         "name": "sisi",
         "species": "I forget...",
-        "height": 126,
+        "height": 300,
         "ref_height": 126,
         "height_correction": 0.5,
         "length": 76,
@@ -117,7 +117,7 @@
     {
         "name": "rhonda",
         "species": "elephant",
-        "height": 137,
+        "height": 170,
         "ref_height": 137,
         "height_correction": 1,
         "length": 73
@@ -134,7 +134,7 @@
     {
         "name": "anna",
         "species": "hyena",
-        "height": 144,
+        "height": 205,
         "ref_height": 144,
         "height_correction": 0.75,
         "length": 85,
@@ -143,7 +143,7 @@
     {
         "name": "bailly",
         "species": "bunny",
-        "height": 145,
+        "height": 155,
         "ref_height": 145,
         "height_correction": 0.75,
         "length": 56,
@@ -152,7 +152,7 @@
     {
         "name": "lady",
         "species": "border collie",
-        "height": 148,
+        "height": 158,
         "ref_height": 148,
         "height_correction": 1,
         "length": 52
@@ -168,7 +168,7 @@
     {
         "name": "fera",
         "species": "fox",
-        "height": 169,
+        "height": 179,
         "ref_height": 169,
         "height_correction": 1,
         "length": 60
@@ -176,7 +176,7 @@
     {
         "name": "tita",
         "species": "deer",
-        "height": 174,
+        "height": 219,
         "ref_height": 174,
         "height_correction": 1,
         "length": 84
@@ -184,7 +184,7 @@
     {
         "name": "contra",
         "species": "house cat",
-        "height": 180,
+        "height": 217,
         "ref_height": 180,
         "height_correction": 1,
         "length": 60
@@ -192,7 +192,7 @@
     {
         "name": "joy",
         "species": "red panda",
-        "height": 180,
+        "height": 140,
         "ref_height": 180,
         "height_correction": 1,
         "length": 49
@@ -200,7 +200,7 @@
     {
         "name": "veronica",
         "species": "cheetah",
-        "height": 180,
+        "height": 110,
         "ref_height": 180,
         "height_correction": 1,
         "length": 38
@@ -208,7 +208,7 @@
     {
         "name": "zuzu",
         "species": "wolf",
-        "height": 180,
+        "height": 450,
         "ref_height": 180,
         "height_correction": 0.25,
         "length": 66,
@@ -217,7 +217,7 @@
     {
         "name": "meg",
         "species": "great white shark",
-        "height": 183,
+        "height": 143,
         "ref_height": 183,
         "height_correction": 1,
         "length": 68
@@ -225,7 +225,7 @@
     {
         "name": "dominika",
         "species": "black bear",
-        "height": 184,
+        "height": 224,
         "ref_height": 184,
         "height_correction": 0.7,
         "length": 110,
@@ -234,7 +234,7 @@
     {
         "name": "becka",
         "species": "lion",
-        "height": 192,
+        "height": 212,
         "ref_height": 192,
         "height_correction": 1,
         "length": 68
@@ -242,7 +242,7 @@
     {
         "name": "bella",
         "species": "lion",
-        "height": 192,
+        "height": 212,
         "ref_height": 192,
         "height_correction": 1,
         "length": 68
@@ -250,7 +250,7 @@
     {
         "name": "hannah",
         "species": "kangaroo",
-        "height": 192,
+        "height": 266,
         "ref_height": 192,
         "height_correction": 0.7,
         "length": 140,
@@ -259,7 +259,7 @@
     {
         "name": "daisy",
         "species": "cow",
-        "height": 204,
+        "height": 374,
         "ref_height": 204,
         "height_correction": 0.5,
         "length": 129,
@@ -268,7 +268,7 @@
     {
         "name": "tonya",
         "species": "tiger",
-        "height": 204,
+        "height": 304,
         "ref_height": 204,
         "height_correction": 1,
         "length": 88
@@ -276,7 +276,7 @@
     {
         "name": "autumn",
         "species": "horse",
-        "height": 206,
+        "height": 194,
         "ref_height": 206,
         "height_correction": 0.8,
         "length": 131,
@@ -285,7 +285,7 @@
     {
         "name": "kel",
         "species": "red panda",
-        "height": 216,
+        "height": 206,
         "ref_height": 216,
         "height_correction": 1,
         "length": 98
@@ -293,7 +293,7 @@
     {
         "name": "vex",
         "species": "sabertooth",
-        "height": 217,
+        "height": 207,
         "ref_height": 217,
         "height_correction": 1,
         "length": 49
@@ -301,7 +301,7 @@
     {
         "name": "mini",
         "species": "mouse",
-        "height": 1092,
+        "height": 802,
         "ref_height": 1092,
         "height_correction": 0.5,
         "length": 180,
@@ -310,7 +310,7 @@
     {
         "name": "usiku",
         "species": "jackal",
-        "height": 1200,
+        "height": 800,
         "ref_height": 1200,
         "height_correction": 0.75,
         "length": 140,
@@ -319,7 +319,7 @@
     {
         "name": "lucy",
         "species": "ram",
-        "height": 1260,
+        "height": 1060,
         "ref_height": 1260,
         "height_correction": 0.3,
         "length": 163,
@@ -328,7 +328,7 @@
     {
         "name": "gina",
         "species": "giraffe",
-        "height": 1392,
+        "height": 802,
         "ref_height": 1392,
         "height_correction": 0.7,
         "length": 219,
@@ -337,7 +337,7 @@
     {
         "name": "xena",
         "species": "t-rex",
-        "height": 1500,
+        "height": 520,
         "ref_height": 1500,
         "height_correction": 1,
         "length": 156
@@ -345,7 +345,7 @@
     {
         "name": "ira",
         "species": "blue jay",
-        "height": 1800,
+        "height": 650,
         "ref_height": 1800,
         "height_correction": 0.75,
         "length": 744,
@@ -354,7 +354,7 @@
     {
         "name": "prima",
         "species": "pine martin",
-        "height": 2400,
+        "height": 2200,
         "ref_height": 2400,
         "height_correction": 0.5,
         "length": 360,
