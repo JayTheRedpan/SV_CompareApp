@@ -1,0 +1,38 @@
+[
+    {
+        "id": "toy",
+        "display_name": "Toy",
+        "height": 0,
+        "disabled": true
+    },
+    {
+        "id": "runt",
+        "display_name": "Runt",
+        "height": 80,
+        "disabled": true
+    },
+    {
+        "id": "mammoth",
+        "display_name": "Mammoth",
+        "height": 96,
+        "disabled": true
+    },
+    {
+        "id": "behemoth",
+        "display_name": "Behemoth",
+        "height": 180,
+        "disabled": true
+    },
+    {
+        "id": "titan",
+        "display_name": "Titan",
+        "height": 360,
+        "disabled": true
+    },
+    {
+        "id": "kaiju",
+        "display_name": "Kaiju",
+        "height": 600,
+        "disabled": true
+    }
+]

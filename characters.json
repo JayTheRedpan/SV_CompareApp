@@ -1,6 +1,7 @@
 [
     {
-        "name": "jay",
+        "id": "jay",
+        "display_name": "Jay",
         "species": "red panda",
         "height": 67,
         "ref_height": 67,
@@ -8,7 +9,8 @@
         "length": 5
     },
     {
-        "name": "maou",
+        "id": "maou",
+        "display_name": "Maou",
         "species": "hyena",
         "height": 68,
         "ref_height": 68,
@@ -16,7 +18,8 @@
         "length": 7
     },
     {
-        "name": "missy",
+        "id": "missy",
+        "display_name": "Missy",
         "species": "snow leopard",
         "height": 94,
         "ref_height": 94,
@@ -24,7 +27,8 @@
         "length": 27
     },
     {
-        "name": "sandy",
+        "id": "sandy",
+        "display_name": "Sandy",
         "species": "fennec fox",
         "height": 240,
         "ref_height": 110,
@@ -33,7 +37,8 @@
         "notes": "she is seated in pic (50%)"
     },
     {
-        "name": "lucile",
+        "id": "lucile",
+        "display_name": "Lucile",
         "species": "skunk",
         "height": 100,
         "ref_height": 111,
@@ -41,7 +46,8 @@
         "length": 39
     },
     {
-        "name": "popo",
+        "id": "popo",
+        "display_name": "Popo",
         "species": "bunny",
         "height": 114,
         "ref_height": 114,
@@ -49,7 +55,8 @@
         "length": 36
     },
     {
-        "name": "juxta",
+        "id": "juxta",
+        "display_name": "Juxta",
         "species": "bunny",
         "height": 114,
         "ref_height": 114,
@@ -57,7 +64,8 @@
         "length": 36
     },
     {
-        "name": "hydey",
+        "id": "hydey",
+        "display_name": "Hydey",
         "species": "bunny",
         "height": 100,
         "ref_height": 116,
@@ -65,7 +73,8 @@
         "length": 40
     },
     {
-        "name": "leona",
+        "id": "leona",        
+        "display_name": "Leona",
         "species": "bunny lion hybrid",
         "height": 162,
         "ref_height": 121,
@@ -73,7 +82,8 @@
         "length": 52
     },
     {
-        "name": "hazel",
+        "id": "hazel",        
+        "display_name": "Hazel",
         "species": "squirrel",
         "height": 124,
         "ref_height": 124,
@@ -81,7 +91,8 @@
         "length": 48
     },
     {
-        "name": "marian",
+        "id": "marian",
+        "display_name": "Marian",
         "species": "african wild dog",
         "height": 90,
         "ref_height": 124,
@@ -89,7 +100,8 @@
         "length": 41
     },
     {
-        "name": "sisi",
+        "id": "sisi",
+        "display_name": "Sisi",
         "species": "I forget...",
         "height": 300,
         "ref_height": 126,
@@ -98,7 +110,8 @@
         "notes": "she is seated in pic (50%)"
     },
     {
-        "name": "brandy",
+        "id": "brandy",
+        "display_name": "Brandy",
         "species": "golden retriever",
         "height": 132,
         "ref_height": 132,
@@ -107,7 +120,8 @@
         "notes": "she is kneeling in pic (75%)"
     },
     {
-        "name": "sin",
+        "id": "sin",        
+        "display_name": "Sin",
         "species": "bunny",
         "height": 134,
         "ref_height": 134,
@@ -115,7 +129,8 @@
         "length": 72
     },
     {
-        "name": "rhonda",
+        "id": "rhonda",        
+        "display_name": "Rhonda",
         "species": "elephant",
         "height": 170,
         "ref_height": 137,
@@ -123,7 +138,8 @@
         "length": 73
     },
     {
-        "name": "jenny",
+        "id": "jenny",
+        "display_name": "Jenny",
         "species": "bunny",
         "height": 139,
         "ref_height": 139,
@@ -132,7 +148,8 @@
         "notes": "she is seated in pic (50%)"
     },
     {
-        "name": "anna",
+        "id": "anna",
+        "display_name": "Anna",
         "species": "hyena",
         "height": 205,
         "ref_height": 144,
@@ -141,7 +158,8 @@
         "notes": "she is kneeling in pic (75%)"
     },
     {
-        "name": "bailly",
+        "id": "bailly",
+        "display_name": "Bailly",
         "species": "bunny",
         "height": 155,
         "ref_height": 145,
@@ -150,7 +168,8 @@
         "notes": "she is seated in pic (75%)"
     },
     {
-        "name": "lady",
+        "id": "lady",
+        "display_name": "Lady",
         "species": "border collie",
         "height": 158,
         "ref_height": 148,
@@ -158,7 +177,8 @@
         "length": 52
     },
     {
-        "name": "libby",
+        "id": "libby",
+        "display_name": "Libby",
         "species": "raccoon",
         "height": 156,
         "ref_height": 156,
@@ -166,7 +186,8 @@
         "length": 53
     },
     {
-        "name": "fera",
+        "id": "fera",
+        "display_name": "Fera",
         "species": "fox",
         "height": 179,
         "ref_height": 169,
@@ -174,7 +195,8 @@
         "length": 60
     },
     {
-        "name": "tita",
+        "id": "tita",
+        "display_name": "Tita",
         "species": "deer",
         "height": 219,
         "ref_height": 174,
@@ -182,7 +204,8 @@
         "length": 84
     },
     {
-        "name": "contra",
+        "id": "contra",
+        "display_name": "Contra",
         "species": "house cat",
         "height": 217,
         "ref_height": 180,
@@ -190,7 +213,8 @@
         "length": 60
     },
     {
-        "name": "joy",
+        "id": "joy",
+        "display_name": "Joy",
         "species": "red panda",
         "height": 140,
         "ref_height": 180,
@@ -198,7 +222,8 @@
         "length": 49
     },
     {
-        "name": "veronica",
+        "id": "veronica",
+        "display_name": "Veronica",
         "species": "cheetah",
         "height": 110,
         "ref_height": 180,
@@ -206,7 +231,8 @@
         "length": 38
     },
     {
-        "name": "zuzu",
+        "id": "zuzu",        
+        "display_name": "Zuzu",
         "species": "wolf",
         "height": 450,
         "ref_height": 180,
@@ -215,7 +241,8 @@
         "notes": "she is on all fours in pic (25%)"
     },
     {
-        "name": "meg",
+        "id": "meg",
+        "display_name": "Meg",
         "species": "great white shark",
         "height": 143,
         "ref_height": 183,
@@ -223,7 +250,8 @@
         "length": 68
     },
     {
-        "name": "dominika",
+        "id": "dominika",
+        "display_name": "Dominika",
         "species": "black bear",
         "height": 224,
         "ref_height": 184,
@@ -232,7 +260,8 @@
         "notes": "she is crouched in pic (70%)"
     },
     {
-        "name": "becka",
+        "id": "becka",
+        "display_name": "Becka",
         "species": "lion",
         "height": 212,
         "ref_height": 192,
@@ -240,7 +269,8 @@
         "length": 68
     },
     {
-        "name": "bella",
+        "id": "bella",        
+        "display_name": "Bella",
         "species": "lion",
         "height": 212,
         "ref_height": 192,
@@ -248,7 +278,8 @@
         "length": 68
     },
     {
-        "name": "hannah",
+        "id": "hannah",
+        "display_name": "Hannah",
         "species": "kangaroo",
         "height": 266,
         "ref_height": 192,
@@ -257,7 +288,8 @@
         "notes": "she is crouched in pic (70%)"
     },
     {
-        "name": "daisy",
+        "id": "daisy",        
+        "display_name": "Daisy",
         "species": "cow",
         "height": 374,
         "ref_height": 204,
@@ -266,7 +298,8 @@
         "notes": "she is bent over in pic (50%)"
     },
     {
-        "name": "tonya",
+        "id": "tonya",
+        "display_name": "Tonya",
         "species": "tiger",
         "height": 304,
         "ref_height": 204,
@@ -274,7 +307,8 @@
         "length": 88
     },
     {
-        "name": "autumn",
+        "id": "autumn",
+        "display_name": "Autumn",
         "species": "horse",
         "height": 194,
         "ref_height": 206,
@@ -283,7 +317,8 @@
         "notes": "she is hunched over in pic (80%)"
     },
     {
-        "name": "kel",
+        "id": "kel",
+        "display_name": "Kel",
         "species": "red panda",
         "height": 206,
         "ref_height": 216,
@@ -291,7 +326,8 @@
         "length": 98
     },
     {
-        "name": "vex",
+        "id": "vex",
+        "display_name": "Vex",
         "species": "sabertooth",
         "height": 207,
         "ref_height": 217,
@@ -299,7 +335,8 @@
         "length": 49
     },
     {
-        "name": "mini",
+        "id": "mini",
+        "display_name": "Mini",
         "species": "mouse",
         "height": 802,
         "ref_height": 1092,
@@ -308,7 +345,8 @@
         "notes": "she is seated in pic (50%)"
     },
     {
-        "name": "usiku",
+        "id": "usiku",        
+        "display_name": "Usiku",
         "species": "jackal",
         "height": 800,
         "ref_height": 1200,
@@ -317,7 +355,8 @@
         "notes": "she is kneeling in pic (75%)"
     },
     {
-        "name": "lucy",
+        "id": "lucy",
+        "display_name": "Lucy",
         "species": "ram",
         "height": 1060,
         "ref_height": 1260,
@@ -326,7 +365,8 @@
         "notes": "she is seated in pic (30%)"
     },
     {
-        "name": "gina",
+        "id": "gina",
+        "display_name": "Gina",
         "species": "giraffe",
         "height": 802,
         "ref_height": 1392,
@@ -335,7 +375,8 @@
         "notes": "she is kneeling in pic (70%)"
     },
     {
-        "name": "xena",
+        "id": "xena",        
+        "display_name": "Xena",
         "species": "t-rex",
         "height": 520,
         "ref_height": 1500,
@@ -343,7 +384,8 @@
         "length": 156
     },
     {
-        "name": "ira",
+        "id": "ira",        
+        "display_name": "Ira",
         "species": "blue jay",
         "height": 650,
         "ref_height": 1800,
@@ -352,12 +394,22 @@
         "notes": "she is kneeling in pic (75%)"
     },
     {
-        "name": "prima",
+        "id": "prima",
+        "display_name": "Prima",
         "species": "pine martin",
         "height": 2200,
         "ref_height": 2400,
         "height_correction": 0.5,
         "length": 360,
         "notes": "she is crouched in pic (50%)"
+    },
+    {
+        "id": "reddey",
+        "display_name": "Reddey",
+        "species": "dragon",
+        "height": 132,
+        "ref_height": 132,
+        "height_correction": 1,
+        "length": 36
     }
 ]

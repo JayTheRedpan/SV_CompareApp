@@ -2,25 +2,75 @@ body{
     background-color: antiquewhite;
 }
 
-.statsdiv,
-.refImages,
-.selectdiv{
+/* -- Tab Buttons -- */
+.tabButtons{
     display: flex;
-    flex-direction: row;
+    border-bottom: 1px solid black;
 }
+
+.tabButtons button{
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    margin-right: 50px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.tabButtons .fa{
+    margin-right: 20px;
+}
+
+.tabButtons button:hover .fa{
+     color: blue;
+}
+/* -- Tabs -- */
+
+.tab{
+    width: 90%;
+    margin: 20px auto;
+    border: 2px solid black;
+    border-radius: 25px;
+    padding: 10px;
+}
+
+table {
+    table-layout:fixed;
+    width: 100%;
+ }
+ td {
+    overflow: auto;
+ }
+
+/* -- Tab Content -- */
 
 .statblock{
-    display: flex;
-    flex-direction: column;
-    margin: 10px;
+    border-bottom: 1px solid black;
 }
 
-
-img{
-    align-self: flex-end;
+#height1ImgCell{
+    text-align: right; 
+    vertical-align: bottom;
 }
 
-.profileImages{
-    visibility: hidden;
-    display: none;
+#height2ImgCell{
+    text-align: left; 
+    vertical-align: bottom;
 }
+
+/* tools */
+
+/* table {
+    border: 3px double green;
+    border-right-style: dashed;
+    border-left-width: 17px;
+    border-bottom-color: orange;
+ }
+ td {
+    border-right-style: dotted;
+    border-width: 3px;
+    border-right-color: red;
+    overflow: auto;
+ } */

@@ -2,6 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="./styles.css">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
 </head>
 <body>
 
@@ -13,30 +14,65 @@
             <option value="" selected="selected" disabled="disabled">Select a Character</option>
         </select>
     </div>
+    
+    <div class="tabButtons">
+        <button id="heightButton" onclick="openHeightTab()"><i class="fa fa-arrows-v"></i>Height</button>
+        <button id="lengthButton" onclick="openLengthTab()"><i class="fa fa-arrows-h"></i>Length</button>
+        <button id="customButton" onclick="openCustomTab()"><i class="fa fa-user-o"></i>Custom</button>
+        <button id="profileButton" onclick="openProfileTab()"><i class="fa fa-address-card-o"></i>Profiles</button>
+    </div>
+    <div class="tabs">
 
-    <div class="statsdiv">
-        <div class="statblock">
-            <h2 id="char1Name"></h2>
-            <h3 id="char1Height"></h3>
+        <div class="tab" id="heightTab">
+            <table>
+                <tr>
+                    <div class="statsdiv" >
+                        <td>
+                            <div class="statblock">
+                                <h2 id="char1Name"></h2>
+                                <h3 id="char1Height"></h3>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="statblock">
+                                <h2 id="char2Name"></h2>
+                                <h3 id="char2Height"></h3>
+                            </div>
+                        </td>
+                    </div>
+                </tr>
+                <tr>
+                    <div class="heightImages">
+                        <td id="height1ImgCell">
+                            <img src="./images/site/blank.png" alt="Character 1" id="height1Img">
+                        </td>
+                        <td id="height2ImgCell">
+                            <img src="./images/site/blank.png" alt="Character 2" id="height2Img">
+                        </td>
+                    </div>
+                </tr>
+            </table>
         </div>
-        <div class="statblock">
-            <h2 id="char2Name"></h2>
-            <h3 id="char2Height"></h3>
+
+        <div class="tab" id="lengthTab" style="display:none;">
+            <h2>Length Tab</h2>
+            <div class="lengthImages">
+                <img src="./images/site/blank.png" alt="Character 1" id="length1img">
+                <img src="./images/site/blank.png" alt="Character 2" id="length2img">
+            </div>
         </div>
-    </div>
 
-    <div class="profileImages">
-        <img src="" alt="Character 1" id="profile1img">
-        <img src="" alt="Character 2" id="profile2img">
-    </div>
+        <div class="tab" id="profileTab" style="display:none;">
+            <div class="profiles">
+                <h2>Profiles Tab</h2>
+            </div>
+        </div>
 
-    <div class="refImages">
-        <img src="" alt="Character 1" id="ref1img">
-        <img src="" alt="Character 2" id="ref2img">
-    </div>
-
-    <div class="profiles">
-
+        <div class="tab" id="customTab" style="display:none;">
+            <div class="custom">
+                <h2>Custom Tab</h2>
+            </div>
+        </div>
     </div>
 
     <script src="./script.js"></script>
