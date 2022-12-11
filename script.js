@@ -1,6 +1,6 @@
- 
+ var charactersData;
 
- //pull all character data from characters json
+ //pull data fom json
 async function getJSON(path) {
     const response = await fetch(path);
     
@@ -8,16 +8,25 @@ async function getJSON(path) {
 }
 
 //gets specific character data based on name
-async function getChar(charName, log = true){
-    const characters = await getJSON('./characters.json');
-    var charData
+function getChar(charID, log = true){
+    var charData;
 
     //search through character json for selected character
-    for (var i=0 ; i < characters.length ; i++)
-    {
-        if (characters[i]["id"] == charName) {
-            charData = characters[i];
+    if((charID) != "custom"){
+        for (var i=0 ; i < charactersData.length ; i++)
+        {
+            if (charactersData[i]["id"] == charID) {
+                charData = charactersData[i];
+            }
         }
+    }
+    else{
+        charData={
+            "id":"custom",
+            "display_name": document.getElementById('customName').value,
+            "height": parseFloat(document.getElementById('customHeightFt').value * 12) + parseFloat(document.getElementById('customHeightIn').value),
+            "height_correction": 1
+        };
     }
 
     if(log){console.log(charData);}
@@ -25,16 +34,19 @@ async function getChar(charName, log = true){
     return charData;
 }
 
-//update drop downs with characters from json
+//load charactersData from JSON and populate drop downs
 async function loadCharacters(){
-    const characters = await getJSON('./characters.json');
+    //pull data about characters and size tiers
+    charactersData = await getJSON('./characters.json');
     const tiers = await getJSON('./tiers.json');
-    var selectEntries = characters.concat(tiers);
+    var selectEntries = charactersData.concat(tiers);
     const select1 = document.getElementById('char1select');
     const select2 = document.getElementById('char2select');
 
+    //sort select list by height
     selectEntries.sort(sortByProperty('height'));
 
+    //update drop downs
     for (var i=0 ; i < selectEntries.length ; i++)
     {
         var opt1 = document.createElement('option');
@@ -62,9 +74,9 @@ async function loadCharacters(){
 }
 
 //scale characters based off of largest
-async function sizeScale(){
-    var char1 = await getChar(document.getElementById('char1select').value, false);
-    var char2 = await getChar(document.getElementById('char2select').value, false);
+function sizeScale(){
+    var char1 = getChar(document.getElementById('char1select').value, false);
+    var char2 = getChar(document.getElementById('char2select').value, false);
     var char1Height = 0;
     var char2Height = 0;
 
@@ -122,49 +134,67 @@ async function sizeScale(){
 }
 
 //updates character 1 after a selection is made
-async function updateChar1(){
+function updateChar1(){
     //variable declaration
-    var charName = document.getElementById('char1select').value;
-    const characters = await getJSON('./characters.json');
-    var charData = await getChar(charName);
+    var charID = document.getElementById('char1select').value;
+    var charData = getChar(charID);
 
     var lengthImg = document.getElementById('length1Img');
     var heightImg = document.getElementById('height1Img');
     
+    //handle custom link
+    var customLink = document.getElementById('customImage').value;
+    var customLinkExtension = customLink.substring(customLink.length-4, customLink.length);
+    var imgExtensions = ["jpeg", ".jpg", ".png"];
+
     //update profile images and size according to character size
-    //lengthImg.src = "./images/head/" + charName + ".png";
+    //lengthImg.src = "./images/head/" + charData.id + ".png";
 
     //update ref images and size according to character size
     document.getElementById('char1Name').innerHTML = charData.display_name;
     document.getElementById('char1Height').innerHTML = Math.floor(charData.height/12) + "' ";
     document.getElementById('char1Height').innerHTML += charData.height % 12 + '"';
-    heightImg.src = "./images/height/" + charData.id + ".png";
+    if(charID == "custom" && customLink != '' && imgExtensions.includes(customLinkExtension)){
+        console.log(document.getElementById('customImage').value);
+        heightImg.crossorigin="anonymous";
+        heightImg.src = document.getElementById('customImage').value;
+    }
+    else{heightImg.src = "./images/height/" + charData.id + ".png";}
 
     //scale pics
-    await sizeScale();
+    sizeScale();
 }
 
 //updates character 2 after a selection is made
-async function updateChar2(){
+function updateChar2(){
     //variable declaration
-    var charName = document.getElementById('char2select').value;
-    const characters = await getJSON('./characters.json');
-    var charData = await getChar(charName);
+    var charID = document.getElementById('char2select').value;
+    var charData = getChar(charID);
 
     var lengthImg = document.getElementById('length2Img');
     var heightImg = document.getElementById('height2Img');
     
+    //handle custom link
+    var customLink = document.getElementById('customImage').value;
+    var customLinkExtension = customLink.substring(customLink.length-4, customLink.length);
+    var imgExtensions = ["jpeg", ".jpg", ".png"];
+
     //update profile images and size according to character size
-    //lengthImg.src = "./images/head/" + charName + ".png";
+    //lengthImg.src = "./images/head/" + charData.id + ".png";
 
     //update ref images and size according to character size
     document.getElementById('char2Name').innerHTML = charData.display_name;
     document.getElementById('char2Height').innerHTML = Math.floor(charData.height/12) + "' ";
     document.getElementById('char2Height').innerHTML += charData.height % 12 + '"';
-    heightImg.src = "./images/height/" + charData.id + ".png";
+    if(charID == "custom" && customLink != '' && imgExtensions.includes(customLinkExtension)){
+        console.log(document.getElementById('customImage').value);
+        heightImg.crossorigin="anonymous";
+        heightImg.src = document.getElementById('customImage').value;
+    }
+    else{heightImg.src = "./images/height/" + charData.id + ".png";}
 
     //scale pics
-    await sizeScale();
+    sizeScale();
 }
 
 //Tab Updates

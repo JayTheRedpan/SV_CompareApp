@@ -9,9 +9,11 @@
     <div class="selectdiv">
         <select name="character1" id="char1select" onchange=updateChar1()>
             <option value="" selected="selected" disabled="disabled">Select a Character</option>
+            <option value="custom">Custom</option>
         </select>
         <select name="character2" id="char2select" onchange=updateChar2()>
             <option value="" selected="selected" disabled="disabled">Select a Character</option>
+            <option value="custom">Custom</option>
         </select>
         <button id="swapButton" onclick="swapChars()"><i class='fa fa-refresh' style="font-size:35px;"></i></i></button>
     </div>
@@ -68,7 +70,29 @@
 
         <div class="tab" id="customTab" style="display:none;">
             <div class="custom">
-                <h2>Custom Tab</h2>
+                <h2>Custom Char Creation</h2>
+                <table>
+                    <tr>
+                        <td>
+                            <label for="customName">Character Name:</label>
+                            <input type="text" value="Custom Name" autocomplete="off" id="customName" onchange="updateChar1(),updateChar2()">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="customHeightFt">Height (ft):</label>
+                            <input type="number" min="0" max="180" value="5" autocomplete="off" id="customHeightFt" onchange="updateChar1(),updateChar2()">
+                            <label for="customHeightIn">Height (in):</label>
+                            <input type="number" min="0" max="11" value="8" autocomplete="off" id="customHeightIn" onchange="updateChar1(),updateChar2()">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="customImage">e621 URL (Optional):</label>
+                            <input type="text" value="" autocomplete="off" id="customImage" onchange="updateChar1(),updateChar2()">
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
