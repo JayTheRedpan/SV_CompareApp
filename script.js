@@ -37,7 +37,7 @@ function getChar(charID, log = true){
         };
     }
     else {
-        
+
     }
 
     if(log){console.log(charData);}
@@ -159,20 +159,22 @@ function updateCharHeight(targetChar){
     var heightImg = document.getElementById('height' + targetChar +'Img');
     
     //handle custom link
-    var customLink = document.getElementById('customImage' + targetChar).value;
+    var customElement;
+    if (charID=="custom1"){customElement = 'customImage1'}
+    else{customElement = 'customImage2'}
+    var customLink = document.getElementById(customElement).value;
     var customLinkExtension = customLink.substring(customLink.length-4, customLink.length);
     var imgExtensions = ["jpeg", ".jpg", ".png"];
 
-    //update profile images and size according to character size
-    //lengthImg.src = "./images/head/" + charData.id + ".png";
-
-    //update height images and stats according to selection
+    //update stats
     document.getElementById('char' + targetChar +'Name').innerHTML = charData.display_name;
     document.getElementById('char' + targetChar +'Height').innerHTML = Math.floor(charData.height/12) + "' ";
     document.getElementById('char' + targetChar +'Height').innerHTML += charData.height % 12 + '"';
-    if(charID == "custom" && customLink != '' && imgExtensions.includes(customLinkExtension)){
+    
+    //update image
+    if((charID == "custom1" || charID == "custom2") && customLink != '' && imgExtensions.includes(customLinkExtension)){
         heightImg.crossorigin="anonymous";
-        heightImg.src = document.getElementById('customImage' + targetChar).value;
+        heightImg.src = customLink;
     }
     else{heightImg.src = "./images/height/" + charData.id + ".png";}
 }
