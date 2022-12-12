@@ -8,7 +8,7 @@ async function getJSON(path) {
 }
 
 //gets specific character data based on name
-function getChar(charID, log = true){
+function getChar(targetChar, charID, log = true){
     var charData;
 
     //search through character json for selected character
@@ -23,8 +23,8 @@ function getChar(charID, log = true){
     else{
         charData={
             "id":"custom",
-            "display_name": document.getElementById('customName').value,
-            "height": parseFloat(document.getElementById('customHeightFt').value * 12) + parseFloat(document.getElementById('customHeightIn').value),
+            "display_name": document.getElementById('customName' + targetChar).value,
+            "height": parseFloat(document.getElementById('customHeightFt' + targetChar).value * 12) + parseFloat(document.getElementById('customHeightIn' + targetChar).value),
             "height_correction": 1
         };
     }
@@ -75,8 +75,8 @@ async function loadCharacters(){
 
 //scale characters based off of largest
 function sizeScale(){
-    var char1 = getChar(document.getElementById('char1select').value, false);
-    var char2 = getChar(document.getElementById('char2select').value, false);
+    var char1 = getChar(1, document.getElementById('char1select').value, false);
+    var char2 = getChar(2, document.getElementById('char2select').value, false);
     var char1Height = 0;
     var char2Height = 0;
 
@@ -133,69 +133,42 @@ function sizeScale(){
 
 }
 
-//updates character 1 after a selection is made
-function updateChar1(){
-    //variable declaration
-    var charID = document.getElementById('char1select').value;
-    var charData = getChar(charID);
+//update character
+function updateCharacter(targetChar){
+    updateCharHeight(targetChar);
+    sizeScale();
+}
 
-    var lengthImg = document.getElementById('length1Img');
-    var heightImg = document.getElementById('height1Img');
+//updates character height tab
+function updateCharHeight(targetChar){
+    //variable declaration
+    var charID = document.getElementById('char' + targetChar +'select').value;
+    var charData = getChar(targetChar, charID);
+
+    var heightImg = document.getElementById('height' + targetChar +'Img');
     
     //handle custom link
-    var customLink = document.getElementById('customImage').value;
+    var customLink = document.getElementById('customImage' + targetChar).value;
     var customLinkExtension = customLink.substring(customLink.length-4, customLink.length);
     var imgExtensions = ["jpeg", ".jpg", ".png"];
 
     //update profile images and size according to character size
     //lengthImg.src = "./images/head/" + charData.id + ".png";
 
-    //update ref images and size according to character size
-    document.getElementById('char1Name').innerHTML = charData.display_name;
-    document.getElementById('char1Height').innerHTML = Math.floor(charData.height/12) + "' ";
-    document.getElementById('char1Height').innerHTML += charData.height % 12 + '"';
+    //update height images and stats according to selection
+    document.getElementById('char' + targetChar +'Name').innerHTML = charData.display_name;
+    document.getElementById('char' + targetChar +'Height').innerHTML = Math.floor(charData.height/12) + "' ";
+    document.getElementById('char' + targetChar +'Height').innerHTML += charData.height % 12 + '"';
     if(charID == "custom" && customLink != '' && imgExtensions.includes(customLinkExtension)){
-        console.log(document.getElementById('customImage').value);
         heightImg.crossorigin="anonymous";
-        heightImg.src = document.getElementById('customImage').value;
+        heightImg.src = document.getElementById('customImage' + targetChar).value;
     }
     else{heightImg.src = "./images/height/" + charData.id + ".png";}
-
-    //scale pics
-    sizeScale();
 }
 
-//updates character 2 after a selection is made
-function updateChar2(){
-    //variable declaration
-    var charID = document.getElementById('char2select').value;
-    var charData = getChar(charID);
+//updtades character length tab
 
-    var lengthImg = document.getElementById('length2Img');
-    var heightImg = document.getElementById('height2Img');
-    
-    //handle custom link
-    var customLink = document.getElementById('customImage').value;
-    var customLinkExtension = customLink.substring(customLink.length-4, customLink.length);
-    var imgExtensions = ["jpeg", ".jpg", ".png"];
 
-    //update profile images and size according to character size
-    //lengthImg.src = "./images/head/" + charData.id + ".png";
-
-    //update ref images and size according to character size
-    document.getElementById('char2Name').innerHTML = charData.display_name;
-    document.getElementById('char2Height').innerHTML = Math.floor(charData.height/12) + "' ";
-    document.getElementById('char2Height').innerHTML += charData.height % 12 + '"';
-    if(charID == "custom" && customLink != '' && imgExtensions.includes(customLinkExtension)){
-        console.log(document.getElementById('customImage').value);
-        heightImg.crossorigin="anonymous";
-        heightImg.src = document.getElementById('customImage').value;
-    }
-    else{heightImg.src = "./images/height/" + charData.id + ".png";}
-
-    //scale pics
-    sizeScale();
-}
 
 //Tab Updates
 function openHeightTab(){
@@ -246,9 +219,9 @@ function openCustomTab(){
     document.getElementById('customButton').style.color = 'blue';
 }
 
-async function adjustScale(){
-    var char1 = await getChar(document.getElementById('char1select').value, false);
-    var char2 = await getChar(document.getElementById('char2select').value, false);
+function adjustScale(){
+    var char1 = getChar(1, document.getElementById('char1select').value, false);
+    var char2 = getChar(2, document.getElementById('char2select').value, false);
     var char1Height = 0;
     var char2Height = 0;
 
@@ -279,8 +252,8 @@ function swapChars(){
     document.getElementById('char1select').value = document.getElementById('char2select').value;
     document.getElementById('char2select').value = char1;
 
-    updateChar1();
-    updateChar2();
+    updateCharacter(1);
+    updateCharacter(2);
 }
 
 //Tool Functions

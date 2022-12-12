@@ -3,10 +3,31 @@ body{
     
 }
 
-select {
+/* -- Logo Div -- */
+.logodiv{
+    display: flex;
+    align-items: center;
+}
+
+#logo{
+    height: 60px;
+    margin: 0 1em 0;
+}
+
+#title{
+    text-decoration: underline;
+}
+
+/* -- Select Menu -- */
+.selectdiv{
+    display: flex;
+    align-items: center;
+}
+
+.selectdiv select {
     width: 200px;
     height: 50px;
-    margin: 2em 2em 2em;
+    margin: 0 1em 2em;
     border: 1px solid #999;
     font-size: 18px;
     color: #000000;
@@ -15,9 +36,8 @@ select {
     box-shadow: 4px 4px rgb(170, 170, 170);
 }
 
-/* -- Select Menu Header -- */
-.selectdiv{
-    display: flex;
+#swapButton{
+    margin: 0 1em 2em;
 }
 
 /* -- Tab Buttons -- */
