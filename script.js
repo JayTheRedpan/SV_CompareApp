@@ -25,7 +25,7 @@ function getChar(targetChar, charID, log = true){
             "id":"custom",
             "display_name": document.getElementById('customName' + targetChar).value,
             "height": parseFloat(document.getElementById('customHeightFt' + targetChar).value * 12) + parseFloat(document.getElementById('customHeightIn' + targetChar).value),
-            "height_correction": 1
+            "height_correction": parseFloat(document.getElementById('customHeightCorrect' + targetChar).value) / 100
         };
     }
 
