@@ -143,9 +143,9 @@
         "species": "bunny",
         "height": 139,
         "ref_height": 139,
-        "height_correction": 0.5,
+        "height_correction": 0.7,
         "length": 24,
-        "notes": "she is seated in pic (50%)"
+        "notes": "she is seated in pic (70%)"
     },
     {
         "id": "anna",
