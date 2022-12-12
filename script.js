@@ -8,11 +8,11 @@ async function getJSON(path) {
 }
 
 //gets specific character data based on name
-function getChar(targetChar, charID, log = true){
+function getChar(charID, log = true){
     var charData;
 
     //search through character json for selected character
-    if((charID) != "custom"){
+    if(charID != "custom1" && charID != "custom2"){
         for (var i=0 ; i < charactersData.length ; i++)
         {
             if (charactersData[i]["id"] == charID) {
@@ -20,13 +20,24 @@ function getChar(targetChar, charID, log = true){
             }
         }
     }
-    else{
+    else if (charID == "custom1"){
         charData={
-            "id":"custom",
-            "display_name": document.getElementById('customName' + targetChar).value,
-            "height": parseFloat(document.getElementById('customHeightFt' + targetChar).value * 12) + parseFloat(document.getElementById('customHeightIn' + targetChar).value),
-            "height_correction": parseFloat(document.getElementById('customHeightCorrect' + targetChar).value) / 100
+            "id":"custom1",
+            "display_name": document.getElementById('customName1').value,
+            "height": parseFloat(document.getElementById('customHeightFt1').value * 12) + parseFloat(document.getElementById('customHeightIn1').value),
+            "height_correction": parseFloat(document.getElementById('customHeightCorrect1').value) / 100
         };
+    }
+    else if (charID == "custom2"){
+        charData={
+            "id":"custom2",
+            "display_name": document.getElementById('customName2').value,
+            "height": parseFloat(document.getElementById('customHeightFt2').value * 12) + parseFloat(document.getElementById('customHeightIn2').value),
+            "height_correction": parseFloat(document.getElementById('customHeightCorrect2').value) / 100
+        };
+    }
+    else {
+        
     }
 
     if(log){console.log(charData);}
@@ -75,8 +86,8 @@ async function loadCharacters(){
 
 //scale characters based off of largest
 function sizeScale(){
-    var char1 = getChar(1, document.getElementById('char1select').value, false);
-    var char2 = getChar(2, document.getElementById('char2select').value, false);
+    var char1 = getChar(document.getElementById('char1select').value, false);
+    var char2 = getChar(document.getElementById('char2select').value, false);
     var char1Height = 0;
     var char2Height = 0;
 
@@ -143,7 +154,7 @@ function updateCharacter(targetChar){
 function updateCharHeight(targetChar){
     //variable declaration
     var charID = document.getElementById('char' + targetChar +'select').value;
-    var charData = getChar(targetChar, charID);
+    var charData = getChar(charID);
 
     var heightImg = document.getElementById('height' + targetChar +'Img');
     
@@ -220,8 +231,8 @@ function openCustomTab(){
 }
 
 function adjustScale(){
-    var char1 = getChar(1, document.getElementById('char1select').value, false);
-    var char2 = getChar(2, document.getElementById('char2select').value, false);
+    var char1 = getChar(document.getElementById('char1select').value, false);
+    var char2 = getChar(document.getElementById('char2select').value, false);
     var char1Height = 0;
     var char2Height = 0;
 
