@@ -9,6 +9,7 @@
         <img src="./images/site/logo.png" id="logo">
         <h1 id="title">Sinverse Size Comparison App</h1>
     </div>
+
     <div class="selectdiv">
         <select name="character1" id="char1select" onchange=updateCharacter(1)>
             <option value="" selected="selected" disabled="disabled">Select a Character</option>
@@ -24,15 +25,17 @@
     </div>
     
     <div class="tabButtons">
-        <button id="heightButton" onclick="openHeightTab()"><i class="fa fa-arrows-v"></i>Height</button>
-        <button id="lengthButton" onclick="openLengthTab()"><i class="fa fa-arrows-h"></i>Length</button>
-        <button id="customButton" onclick="openCustomTab()"><i class="fa fa-user-o"></i>Custom</button>
-        <button id="profileButton" onclick="openProfileTab()"><i class="fa fa-address-card-o"></i>Profiles</button>
+        <button id="heightButton" onclick="openTab('height')"><i class="fa fa-arrows-v"></i>Height</button>
+        <button id="lengthButton" onclick="openTab('length')"><i class="fa fa-arrows-h"></i>Length</button>
+        <button id="customButton" onclick="openTab('custom')"><i class="fa fa-user-o"></i>Custom</button>
+        <button id="profileButton" onclick="openTab('profile')"><i class="fa fa-address-card-o"></i>Profiles</button>
     </div>
+
     <div class="tabs">
 
         <div class="tab" id="heightTab">
-            <input type="range" min="0.5" max = 10.5 value="1" id="scaleRange" onchange="adjustScale()">
+            <input type="range" min="0.5" max = 10.5 value="1" id="zoomRange" onchange="adjustZoom()" />
+            <input type="color" id="heightBGColor" value="#FAEBD7" onchange="updateHeightBG()"/>
             <table>
                 <colgroup>
                     <col span="1" style="width: 50%;" id="char1HeightCol">
@@ -50,10 +53,12 @@
                 </tr>
                 <tr class="heightImages">
                     <td id="height1ImgCell">
-                        <img src="./images/site/blank.png" alt="Character 1" id="height1Img">
+                        <img src="./images/site/blank.png" alt="Character 1" id="height1Img" onload="drawHeights()" style="display: none">
+                        <canvas id="height1Canvas" width="1" height="1"></canvas>
                     </td>
                     <td id="height2ImgCell">
-                        <img src="./images/site/blank.png" alt="Character 2" id="height2Img">
+                        <img src="./images/site/blank.png" alt="Character 2" id="height2Img" onload="drawHeights()" style="display: none">
+                        <canvas id="height2Canvas" width="1" height="1"></canvas>
                     </td>
                 </tr>
             </table>
@@ -77,63 +82,125 @@
             <div class="custom">
                 <h2>Custom Character Creation</h2>
                 <h3>Custom 1</h3>
-                <table>
-                    <tr>
-                        <td>
-                            <label for="customName1">Character Name:</label>
-                            <input type="text" value="Custom Character 1" autocomplete="off" id="customName1" onchange="updateCharacter(1),updateCharacter(2)">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="customHeightFt1">Height (ft):</label>
-                            <input type="number" min="0" max="180" value="5" autocomplete="off" id="customHeightFt1" onchange="updateCharacter(1),updateCharacter(2)">
-                            <label for="customHeightIn1">Height (in):</label>
-                            <input type="number" min="0" max="11" value="8" autocomplete="off" id="customHeightIn1" onchange="updateCharacter(1),updateCharacter(2)">
-                        </td>
-                    <tr>
-                        <td>
-                            <label for="customHeightCorrect1">Height Correction (%):</label>
-                            <input type="number" min="1" max="120" value="100" autocomplete="off" id="customHeightCorrect1" onchange="updateCharacter(1),updateCharacter(2)">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="customImage1">e621 URL (Optional):</label>
-                            <input type="text" value="" autocomplete="off" id="customImage1" onchange="updateCharacter(1),updateCharacter(2)">
-                        </td>
-                    </tr>
-                </table>
+                <div id="custom1" style="display: flex">
+                    <div class="customLeft">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label for="customName1">Character Name:</label>
+                                    <input type="text" value="Custom Character 1" autocomplete="off" id="customName1" onchange=customUpdate()>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="customHeightFt1">Height (ft):</label>
+                                    <input type="number" min="0" max="180" value="5" autocomplete="off" id="customHeightFt1" onchange=customUpdate()>
+                                    <label for="customHeightIn1">Height (in):</label>
+                                    <input type="number" min="0" max="11" value="8" autocomplete="off" id="customHeightIn1" onchange=customUpdate()>
+                                </td>
+                            <tr>
+                                <td>
+                                    <label for="customHeightCorrect1">Height Correction (%):</label>
+                                    <input type="number" min="1" max="120" value="100" autocomplete="off" id="customHeightCorrect1" onchange=customUpdate()>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="customImage1">Image URL (Optional):</label>
+                                    <input type="text" value="" autocomplete="off" id="customImage1" onchange=customUpdate()>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="cropImageT1">Top Crop:</label>
+                                    <input type="number" min="0" max="100" value="0" autocomplete="off" id="cropImageT1" onchange="customUpdate(), adjustCrop('T1', false)")>
+                                    <label for="cropImageR1">Right Crop:</label>
+                                    <input type="number" min="0" max="100" value="0" autocomplete="off" id="cropImageR1" onchange="customUpdate(), adjustCrop('R1', false)">
+                                    <label for="cropImageB1">Bottom Crop:</label>
+                                    <input type="number" min="0" max="100" value="0" autocomplete="off" id="cropImageB1" onchange="customUpdate(), adjustCrop('B1', false)">
+                                    <label for="cropImageL1">Left Crop:</label>
+                                    <input type="number" min="0" max="100" value="0" autocomplete="off" id="cropImageL1" onchange="customUpdate(), adjustCrop('L1', false)">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="cropImageRangeT1">Top Crop:</label>
+                                    <input type="range" min="0" max = 100 value="0" id="cropImageRangeT1" oninput="adjustCrop('T1')" />
+                                    <label for="cropImageRangeR1">Right Crop:</label>
+                                    <input type="range" min="0" max = 100 value="0" id="cropImageRangeR1" oninput="adjustCrop('R1')" />
+                                    <label for="cropImageRangeB1">Bottom Crop:</label>
+                                    <input type="range" min="0" max = 100 value="0" id="cropImageRangeB1" oninput="adjustCrop('B1')" />
+                                    <label for="cropImageRangeL1">Left Crop:</label>
+                                    <input type="range" min="0" max = 100 value="0" id="cropImageRangeL1" oninput="adjustCrop('L1')" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="customRight" id="customRight1">
+                        <canvas class="customCanvas" id="customCanvas1" width="100" height="100"></canvas>
+                    </div>
+                </div>
                 <br>
                 <h3>Custom 2</h3>
-                <table>
-                    <tr>
-                        <td>
-                            <label for="customName2">Character Name:</label>
-                            <input type="text" value="Custom Character 2" autocomplete="off" id="customName2" onchange="updateCharacter(1),updateCharacter(2)">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="customHeightFt2">Height (ft):</label>
-                            <input type="number" min="0" max="180" value="5" autocomplete="off" id="customHeightFt2" onchange="updateCharacter(1),updateCharacter(2)">
-                            <label for="customHeightIn2">Height (in):</label>
-                            <input type="number" min="0" max="11" value="8" autocomplete="off" id="customHeightIn2" onchange="updateCharacter(1),updateCharacter(2)">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="customHeightCorrect2">Height Correction (%):</label>
-                            <input type="number" min="1" max="120" value="100" autocomplete="off" id="customHeightCorrect2" onchange="updateCharacter(1),updateCharacter(2)">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="customImage2">e621 URL (Optional):</label>
-                            <input type="text" value="" autocomplete="off" id="customImage2" onchange="updateCharacter(1),updateCharacter(2)">
-                        </td>
-                    </tr>
-                </table>
+                <div id="custom2" style="display: flex">
+                    <div class="customLeft">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label for="customName2">Character Name:</label>
+                                    <input type="text" value="Custom Character 2" autocomplete="off" id="customName2" onchange=customUpdate()>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="customHeightFt2">Height (ft):</label>
+                                    <input type="number" min="0" max="180" value="5" autocomplete="off" id="customHeightFt2" onchange=customUpdate()>
+                                    <label for="customHeightIn2">Height (in):</label>
+                                    <input type="number" min="0" max="11" value="8" autocomplete="off" id="customHeightIn2" onchange=customUpdate()>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="customHeightCorrect2">Height Correction (%):</label>
+                                    <input type="number" min="1" max="120" value="100" autocomplete="off" id="customHeightCorrect2" onchange=customUpdate()>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="customImage2">Image URL (Optional):</label>
+                                    <input type="text" value="" autocomplete="off" id="customImage2" onchange=customUpdate()>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="cropImageT2">Top Crop:</label>
+                                    <input type="number" min="0" max="100" value="0" autocomplete="off" id="cropImageT2" onchange="customUpdate(), adjustCrop('T2', false)")>
+                                    <label for="cropImageR2">Right Crop:</label>
+                                    <input type="number" min="0" max="100" value="0" autocomplete="off" id="cropImageR2" onchange="customUpdate(), adjustCrop('R2', false)">
+                                    <label for="cropImageB2">Bottom Crop:</label>
+                                    <input type="number" min="0" max="100" value="0" autocomplete="off" id="cropImageB2" onchange="customUpdate(), adjustCrop('B2', false)">
+                                    <label for="cropImageL2">Left Crop:</label>
+                                    <input type="number" min="0" max="100" value="0" autocomplete="off" id="cropImageL2" onchange="customUpdate(), adjustCrop('L2', false)">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="cropImageRangeT2">Top Crop:</label>
+                                    <input type="range" min="0" max = 100 value="0" id="cropImageRangeT2" oninput="adjustCrop('T2')" />
+                                    <label for="cropImageRangeR2">Right Crop:</label>
+                                    <input type="range" min="0" max = 100 value="0" id="cropImageRangeR2" oninput="adjustCrop('R2')" />
+                                    <label for="cropImageRangeB2">Bottom Crop:</label>
+                                    <input type="range" min="0" max = 100 value="0" id="cropImageRangeB2" oninput="adjustCrop('B2')" />
+                                    <label for="cropImageRangeL2">Left Crop:</label>
+                                    <input type="range" min="0" max = 100 value="0" id="cropImageRangeL2" oninput="adjustCrop('L2')" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="customRight" id="customRight2">
+                        <canvas class="customCanvas" id="customCanvas2" width="100" height="100"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
