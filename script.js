@@ -56,13 +56,13 @@ function getChar(charID, log = true){
 }
 
 //update character
-function updateCharacter(targetChar){
+function updateCharacter(targetChar, log = true){
     const char1Select = document.getElementById('char1select').value;
     const char2Select = document.getElementById('char2select').value;
     
     //update character global data
-    if(targetChar == "1" && char1Select != ""){char1 = getChar(char1Select);}
-    else if(targetChar == "2" && char2Select != ""){char2 = getChar(char2Select);}
+    if(targetChar == "1" && char1Select != ""){char1 = getChar(char1Select, log);}
+    else if(targetChar == "2" && char2Select != ""){char2 = getChar(char2Select, log);}
 
     //update character height image/stats
     updateCharHeight(targetChar);
@@ -153,19 +153,35 @@ function drawHeights(manualZoom = 0){
     var cropRight;
     var cropBottom;
     var cropLeft;
+    var toFilterColor;
+    var filterR;
+    var filterG;
+    var filterB;
+    var tolerance;
 
     //draw character 1
-    if (char1.id == 'custom1'){
+    toFilterColor = false;
+    if (char1.id == 'custom1' && document.getElementById('customImage1').value != ''){
         cropTop = parseFloat(document.getElementById('cropImageT1').value)/100;
         cropRight = parseFloat(document.getElementById('cropImageR1').value)/100;
         cropBottom = parseFloat(document.getElementById('cropImageB1').value)/100;
         cropLeft = parseFloat(document.getElementById('cropImageL1').value)/100;
+        toFilterColor = document.getElementById('removeBGColorCheck1').checked;
+        filterR = parseInt(document.getElementById('removeBGColor1').value.substring(1, 3), 16);
+        filterG = parseInt(document.getElementById('removeBGColor1').value.substring(3, 5), 16);
+        filterB = parseInt(document.getElementById('removeBGColor1').value.substring(5, 7), 16);
+        tolerance = parseFloat(document.getElementById('removeTolerance1').value);
     }
-    else if (char1.id == 'custom2'){
+    else if (char1.id == 'custom2' && document.getElementById('customImage2').value != ''){
         cropTop = parseFloat(document.getElementById('cropImageT2').value)/100;
         cropRight = parseFloat(document.getElementById('cropImageR2').value)/100;
         cropBottom = parseFloat(document.getElementById('cropImageB2').value)/100;
         cropLeft = parseFloat(document.getElementById('cropImageL2').value)/100;
+        toFilterColor = document.getElementById('removeBGColorCheck2').checked;
+        filterR = parseInt(document.getElementById('removeBGColor2').value.substring(1, 3), 16);
+        filterG = parseInt(document.getElementById('removeBGColor2').value.substring(3, 5), 16);
+        filterB = parseInt(document.getElementById('removeBGColor2').value.substring(5, 7), 16);
+        tolerance = parseFloat(document.getElementById('removeTolerance2').value);
     }
     else{
         cropTop = 0;
@@ -183,19 +199,32 @@ function drawHeights(manualZoom = 0){
         0, 0,                                                 //where to place image
         canvas1.width, canvas1.height                         //size to scale placed image
     );
+    
+    if(toFilterColor){filterFromCanvas(canvas1, filterR, filterG, filterB, tolerance)}
 
     //draw character 2
-    if (char2.id == 'custom1'){
+    toFilterColor = false;
+    if (char2.id == 'custom1' && document.getElementById('customImage1').value != ''){
         cropTop = parseFloat(document.getElementById('cropImageT1').value)/100;
         cropRight = parseFloat(document.getElementById('cropImageR1').value)/100;
         cropBottom = parseFloat(document.getElementById('cropImageB1').value)/100;
         cropLeft = parseFloat(document.getElementById('cropImageL1').value)/100;
+        toFilterColor = document.getElementById('removeBGColorCheck1').checked;
+        filterR = parseInt(document.getElementById('removeBGColor1').value.substring(1, 3), 16);
+        filterG = parseInt(document.getElementById('removeBGColor1').value.substring(3, 5), 16);
+        filterB = parseInt(document.getElementById('removeBGColor1').value.substring(5, 7), 16);
+        tolerance = parseFloat(document.getElementById('removeTolerance1').value);
     }
-    else if (char2.id == 'custom2'){
+    else if (char2.id == 'custom2' && document.getElementById('customImage2').value != ''){
         cropTop = parseFloat(document.getElementById('cropImageT2').value)/100;
         cropRight = parseFloat(document.getElementById('cropImageR2').value)/100;
         cropBottom = parseFloat(document.getElementById('cropImageB2').value)/100;
         cropLeft = parseFloat(document.getElementById('cropImageL2').value)/100;
+        toFilterColor = document.getElementById('removeBGColorCheck2').checked;
+        filterR = parseInt(document.getElementById('removeBGColor2').value.substring(1, 3), 16);
+        filterG = parseInt(document.getElementById('removeBGColor2').value.substring(3, 5), 16);
+        filterB = parseInt(document.getElementById('removeBGColor2').value.substring(5, 7), 16);
+        tolerance = parseFloat(document.getElementById('removeTolerance2').value);
     }
     else{
         cropTop = 0;
@@ -213,6 +242,8 @@ function drawHeights(manualZoom = 0){
         0, 0,                                                 //where to place image
         canvas2.width, canvas2.height                         //size to scale placed image
     );
+
+    if(toFilterColor){filterFromCanvas(canvas2, filterR, filterG, filterB, tolerance)}
 }
 
 //adjust height canvas sizes based on character sizes
@@ -359,13 +390,7 @@ function updateHeightBG(){
 
 
 //-------- Custom Tab Stuff -----------------
-function customUpdate(){
-    const char1Select = document.getElementById('char1select').value;
-    const char2Select = document.getElementById('char2select').value;
-    
-    if(char1Select == "custom1" || char1Select == "custom2"){updateCharacter(1);}
-    if(char2Select == "custom1" || char2Select == "custom2"){updateCharacter(2);}
-
+function updatePreview(){
     if(document.getElementById('customImage1').value != ''){updateCustomCanvas(1);}
     if(document.getElementById('customImage2').value != ''){updateCustomCanvas(2);}
 }
@@ -377,7 +402,7 @@ function adjustCrop(targetCrop, barToBox = true){
     if(barToBox){cropBox.value = cropBar.value;}
     else{cropBar.value = cropBox.value;}
 
-    customUpdate(targetCrop.charAt(1));
+    updatePreview(targetCrop.charAt(1));
 }
 
 function updateCustomCanvas(targetCanv){
@@ -437,6 +462,21 @@ function updateCustomCanvas(targetCanv){
 }
 
 //---- Toolbox Functions ----------
+function filterFromCanvas(canvas, R, G, B, tolerance = 0){
+    const ctx = canvas.getContext("2d");
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    tolerance = Math.abs(tolerance);
+
+    for(let i = 0; i < imgData.data.length; i += 4){
+        if((imgData.data[i] >= R - tolerance && imgData.data[i] <= R + tolerance)
+        && (imgData.data[i + 1] >= G - tolerance && imgData.data[i + 1] <= G + tolerance) 
+        && (imgData.data[i + 2] >= B - tolerance && imgData.data[i + 2] <= B + tolerance))
+            imgData.data[i + 3] = 0;
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+}
+
 async function getJSON(path) {
     const response = await fetch(path);
     
