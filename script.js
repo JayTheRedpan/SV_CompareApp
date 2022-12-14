@@ -1,15 +1,15 @@
  //-------- Global Variables -----------
  var charactersData;
  var char1 = {
-    "id": "",        
-    "display_name": "Choose a Character",
+    "id": "blank",        
+    "display_name": "Select a Character",
     "height": 0,
     "height_correction": 1,
     "length": 0
 };
  var char2 = {
-    "id": "",        
-    "display_name": "Choose a Character",
+    "id": "blank",        
+    "display_name": "Select a Character",
     "height": 0,
     "height_correction": 1,
     "length": 0
@@ -61,17 +61,48 @@ function updateCharacter(targetChar, log = true){
     const char2Select = document.getElementById('char2select').value;
     
     //update character global data
-    if(targetChar == "1" && char1Select != ""){char1 = getChar(char1Select, log);}
-    else if(targetChar == "2" && char2Select != ""){char2 = getChar(char2Select, log);}
+    if(targetChar == "1" && char1Select != "blank"){char1 = getChar(char1Select, log);}
+    else if(targetChar == "2" && char2Select != "blank"){char2 = getChar(char2Select, log);}
+    
+    //handle blanks on character swap
+    if(targetChar == "1" && char1Select == "blank"){
+        char1 = {
+        "id": "blank",        
+            "display_name": "Select a Character",
+            "height": 0,
+            "height_correction": 1,
+            "length": 0
+        };
+    }
+    else if(targetChar == "2" && char2Select == "blank"){
+        char2 = {
+            "id": "blank",        
+            "display_name": "Select a Character",
+            "height": 0,
+            "height_correction": 1,
+            "length": 0
+        };
+    }
 
     //update character height image/stats
     updateCharHeight(targetChar);
     //adjustHeightWidths();
-    
+
     //update character length images/stats
 
     
     //update character profile images/stats
+
+}
+
+function swapChars(){
+    var char1 = document.getElementById('char1select').value;
+
+    document.getElementById('char1select').value = document.getElementById('char2select').value;
+    document.getElementById('char2select').value = char1;
+
+    updateCharacter(1, false);
+    updateCharacter(2, false);
 }
 
 function openTab(tabName){
@@ -88,16 +119,6 @@ function openTab(tabName){
     document.getElementById(tabName + 'Tab').style.display = 'block';
     document.getElementById(tabName + 'Button').style.color = 'blue';
 }
-
-function swapChars(){
-    var char1 = document.getElementById('char1select').value;
-
-    document.getElementById('char1select').value = document.getElementById('char2select').value;
-    document.getElementById('char2select').value = char1;
-
-    updateCharacter(1);
-    updateCharacter(2);
-}
 //-------- Height Tab Stuff -----------------
 
 //updates character height tab
@@ -111,8 +132,8 @@ function updateCharHeight(targetChar){
 
     //handle custom link
     var customElement;
-    if (charData.id=="custom1"){customElement = 'customImage1'}
-    else{customElement = 'customImage2'}
+    if (charData.id=="custom1"){customElement = 'customHeightImageURL1'}
+    else{customElement = 'customHeightImageURL2'}
     var customLink = document.getElementById(customElement).value;
 
     //update stats
@@ -161,7 +182,7 @@ function drawHeights(manualZoom = 0){
 
     //draw character 1
     toFilterColor = false;
-    if (char1.id == 'custom1' && document.getElementById('customImage1').value != ''){
+    if (char1.id == 'custom1' && document.getElementById('customHeightImageURL1').value != ''){
         cropTop = parseFloat(document.getElementById('cropImageT1').value)/100;
         cropRight = parseFloat(document.getElementById('cropImageR1').value)/100;
         cropBottom = parseFloat(document.getElementById('cropImageB1').value)/100;
@@ -172,7 +193,7 @@ function drawHeights(manualZoom = 0){
         filterB = parseInt(document.getElementById('removeBGColor1').value.substring(5, 7), 16);
         tolerance = parseFloat(document.getElementById('removeTolerance1').value);
     }
-    else if (char1.id == 'custom2' && document.getElementById('customImage2').value != ''){
+    else if (char1.id == 'custom2' && document.getElementById('customHeightImageURL2').value != ''){
         cropTop = parseFloat(document.getElementById('cropImageT2').value)/100;
         cropRight = parseFloat(document.getElementById('cropImageR2').value)/100;
         cropBottom = parseFloat(document.getElementById('cropImageB2').value)/100;
@@ -204,7 +225,7 @@ function drawHeights(manualZoom = 0){
 
     //draw character 2
     toFilterColor = false;
-    if (char2.id == 'custom1' && document.getElementById('customImage1').value != ''){
+    if (char2.id == 'custom1' && document.getElementById('customHeightImageURL1').value != ''){
         cropTop = parseFloat(document.getElementById('cropImageT1').value)/100;
         cropRight = parseFloat(document.getElementById('cropImageR1').value)/100;
         cropBottom = parseFloat(document.getElementById('cropImageB1').value)/100;
@@ -215,7 +236,7 @@ function drawHeights(manualZoom = 0){
         filterB = parseInt(document.getElementById('removeBGColor1').value.substring(5, 7), 16);
         tolerance = parseFloat(document.getElementById('removeTolerance1').value);
     }
-    else if (char2.id == 'custom2' && document.getElementById('customImage2').value != ''){
+    else if (char2.id == 'custom2' && document.getElementById('customHeightImageURL2').value != ''){
         cropTop = parseFloat(document.getElementById('cropImageT2').value)/100;
         cropRight = parseFloat(document.getElementById('cropImageR2').value)/100;
         cropBottom = parseFloat(document.getElementById('cropImageB2').value)/100;
@@ -390,9 +411,21 @@ function updateHeightBG(){
 
 
 //-------- Custom Tab Stuff -----------------
-function updatePreview(){
-    if(document.getElementById('customImage1').value != ''){updateCustomCanvas(1);}
-    if(document.getElementById('customImage2').value != ''){updateCustomCanvas(2);}
+
+function openCustomTab(customTab){
+    document.getElementById('custom1').style.display = 'none';
+    document.getElementById('custom2').style.display = 'none';
+
+    document.getElementById('custom1Button').style.color = '#000';
+    document.getElementById('custom2Button').style.color = '#000';
+
+    document.getElementById('custom' + customTab).style.display = 'block';
+    document.getElementById('custom' + customTab + 'Button').style.color = 'blue';
+}
+
+function updateHeightPreview(){
+    if(document.getElementById('customHeightImageURL1').value != ''){updateHeightPreviewCanvas(1);}
+    if(document.getElementById('customHeightImageURL2').value != ''){updateHeightPreviewCanvas(2);}
 }
 
 function adjustCrop(targetCrop, barToBox = true){
@@ -402,14 +435,34 @@ function adjustCrop(targetCrop, barToBox = true){
     if(barToBox){cropBox.value = cropBar.value;}
     else{cropBar.value = cropBox.value;}
 
-    updatePreview(targetCrop.charAt(1));
+    updateHeightPreview(targetCrop.charAt(1));
 }
 
-function updateCustomCanvas(targetCanv){
-    const canvas = document.getElementById('customCanvas' + targetCanv);
+function updateHeightPreviewCanvas(targetCanv, resetControls = false){
+    const canvas = document.getElementById('customHeightPreviewCanvas' + targetCanv);
     const ctx = canvas.getContext('2d');
-    const customLink = document.getElementById('customImage' + targetCanv).value;
+    const customLink = document.getElementById('customHeightImageURL' + targetCanv).value;
     const container = document.getElementById('customRight' + targetCanv);
+
+    //reset controls if new image
+    if(resetControls){
+        //reset crop fields
+        document.getElementById('cropImageT' + targetCanv).value = 0;
+        document.getElementById('cropImageR' + targetCanv).value = 0;
+        document.getElementById('cropImageB' + targetCanv).value = 0;
+        document.getElementById('cropImageL' + targetCanv).value = 0;
+
+        //reset crop sliders
+        document.getElementById('cropImageRangeT' + targetCanv).value = 0;
+        document.getElementById('cropImageRangeR' + targetCanv).value = 0;
+        document.getElementById('cropImageRangeB' + targetCanv).value = 0;
+        document.getElementById('cropImageRangeL' + targetCanv).value = 0;
+
+        //reset background filtering
+        document.getElementById('removeBGColorCheck'  + targetCanv).checked = false;
+        document.getElementById('removeTolerance'  + targetCanv).value = 0;
+    }
+
     var cropTop = parseFloat(document.getElementById('cropImageT' + targetCanv).value)/100;
     var cropRight = parseFloat(document.getElementById('cropImageR' + targetCanv).value)/100;
     var cropBottom = parseFloat(document.getElementById('cropImageB' + targetCanv).value)/100;
@@ -456,12 +509,47 @@ function updateCustomCanvas(targetCanv){
         ctx.lineWidth = 2; //width
         ctx.stroke();  //draw to canvas
     };
+    
+    //handle bad image links
+    img.onerror = function () {
+        //reset canvas size
+        canvas.width = 100;
+        canvas.height = 100;
+        
+        //clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        //tell user it was a bad url
+        ctx.fillStyle = "red";
+        ctx.textAlign = "center";
+        ctx.fillText("Bad Image URL", canvas.width/2, canvas.height/2);
+
+        //blank url
+        document.getElementById('customHeightImageURL' + targetCanv).value = '';
+
+        //reset crop fields
+        document.getElementById('cropImageT' + targetCanv).value = 0;
+        document.getElementById('cropImageR' + targetCanv).value = 0;
+        document.getElementById('cropImageB' + targetCanv).value = 0;
+        document.getElementById('cropImageL' + targetCanv).value = 0;
+
+        //reset crop sliders
+        document.getElementById('cropImageRangeT' + targetCanv).value = 0;
+        document.getElementById('cropImageRangeR' + targetCanv).value = 0;
+        document.getElementById('cropImageRangeB' + targetCanv).value = 0;
+        document.getElementById('cropImageRangeL' + targetCanv).value = 0;
+
+        //reset background filtering
+        document.getElementById('removeBGColorCheck'  + targetCanv).checked = false;
+        document.getElementById('removeTolerance'  + targetCanv).value = 0;
+    }
 
     img.src = customLink;
 
 }
 
 //---- Toolbox Functions ----------
+
 function filterFromCanvas(canvas, R, G, B, tolerance = 0){
     const ctx = canvas.getContext("2d");
     const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);

@@ -12,12 +12,12 @@
 
     <div class="selectdiv">
         <select name="character1" id="char1select" onchange=updateCharacter(1)>
-            <option value="" selected="selected" disabled="disabled">Select a Character</option>
+            <option value="blank" selected="selected" disabled="disabled">Select a Character</option>
             <option value="custom1">Custom 1</option>
             <option value="custom2">Custom 2</option>
         </select>
         <select name="character2" id="char2select" onchange=updateCharacter(2)>
-            <option value="" selected="selected" disabled="disabled">Select a Character</option>
+            <option value="blank" selected="selected" disabled="disabled">Select a Character</option>
             <option value="custom1">Custom 1</option>
             <option value="custom2">Custom 2</option>
         </select>
@@ -81,8 +81,12 @@
         <div class="tab" id="customTab" style="display:none;">
             <div class="custom">
                 <h2>Custom Character Creation</h2>
-                <h3>Custom 1</h3>
+                <div class="customTabButtons">
+                    <button id="custom1Button" onclick=openCustomTab(1)>1</button>
+                    <button id="custom2Button" onclick=openCustomTab(2)>2</button>
+                </div>
                 <div id="custom1" style="display: flex">
+                    <h3>Custom Character 1</h3>
                     <div class="customLeft">
                         <table>
                             <tr>
@@ -107,7 +111,7 @@
                             <tr>
                                 <td>
                                     <label for="customImage1">Image URL (Optional):</label>
-                                    <input type="text" value="" autocomplete="off" id="customImage1" oninput=updatePreview()>
+                                    <input type="text" value="" autocomplete="off" id="customHeightImageURL1" onchange="updateHeightPreviewCanvas(1, true)">
                                 </td>
                             </tr>
                             <tr>
@@ -120,12 +124,14 @@
                                     <input type="number" min="0" max="100" value="0" autocomplete="off" id="cropImageB1" oninput="adjustCrop('B1', false)">
                                     <label for="cropImageL1">Left Crop:</label>
                                     <input type="number" min="0" max="100" value="0" autocomplete="off" id="cropImageL1" oninput="adjustCrop('L1', false)">
+                                    
                                     <label style="display: none" for="removeBGColorCheck1">Remove BG</label>
-                                    <input style="display: none" type="checkbox" id="removeBGColorCheck1" value="true">
+                                    <input style="display: none" type="checkbox" id="removeBGColorCheck1">
                                     <label style="display: none" for="removeBGColor1"></label>
                                     <input style="display: none" type="color" id="removeBGColor1">
                                     <label style="display: none" for="removeTolerance1">Tolerance:</label>
                                     <input style="display: none" type="number" value="0" id="removeTolerance1">
+
                                 </td>
                             </tr>
                             <tr>
@@ -143,12 +149,11 @@
                         </table>
                     </div>
                     <div class="customRight" id="customRight1">
-                        <canvas class="customCanvas" id="customCanvas1" width="100" height="100"></canvas>
+                        <canvas class="customCanvas" id="customHeightPreviewCanvas1" width="100" height="100"></canvas>
                     </div>
                 </div>
-                <br>
-                <h3>Custom 2</h3>
-                <div id="custom2" style="display: flex">
+                <div id="custom2" style="display: flex; display: none;">
+                    <h3>Custom Character 2</h3>
                     <div class="customLeft">
                         <table>
                             <tr>
@@ -174,7 +179,7 @@
                             <tr>
                                 <td>
                                     <label for="customImage2">Image URL (Optional):</label>
-                                    <input type="text" value="" autocomplete="off" id="customImage2" oninput=updatePreview()>
+                                    <input type="text" value="" autocomplete="off" id="customHeightImageURL2" onchange="updateHeightPreviewCanvas(2, true)">
                                 </td>
                             </tr>
                             <tr>
@@ -187,8 +192,9 @@
                                     <input type="number" min="0" max="100" value="0" autocomplete="off" id="cropImageB2" oninput="adjustCrop('B2', false)">
                                     <label for="cropImageL2">Left Crop:</label>
                                     <input type="number" min="0" max="100" value="0" autocomplete="off" id="cropImageL2" oninput="adjustCrop('L2', false)">
+                                    
                                     <label style="display: none" for="removeBGColorCheck2">Remove BG</label>
-                                    <input style="display: none" type="checkbox" id="removeBGColorCheck2" value="true">
+                                    <input style="display: none" type="checkbox" id="removeBGColorCheck2">
                                     <label style="display: none" for="removeBGColor2"></label>
                                     <input style="display: none" type="color" id="removeBGColor2">
                                     <label style="display: none" for="removeTolerance2">Tolerance:</label>
@@ -210,7 +216,7 @@
                         </table>
                     </div>
                     <div class="customRight" id="customRight2">
-                        <canvas class="customCanvas" id="customCanvas2" width="100" height="100"></canvas>
+                        <canvas class="customCanvas" id="customHeightPreviewCanvas2" width="100" height="100"></canvas>
                     </div>
                 </div>
             </div>
