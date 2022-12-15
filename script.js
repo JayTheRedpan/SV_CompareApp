@@ -1,5 +1,6 @@
  //-------- Global Variables -----------
  var charactersData;
+ var corsProxyURL = "https://api.codetabs.com/v1/proxy?quest=";
  var char1 = {
     "id": "blank",        
     "display_name": "Select a Character",
@@ -143,8 +144,8 @@ function updateCharHeight(targetChar){
     
     //update image
     if((charData.id == "custom1" || charData.id == "custom2") && customLink != ''){
-        heightImg.crossorigin="anonymous";
-        heightImg.src = customLink;
+        //heightImg.crossorigin="anonymous";
+        heightImg.src = corsProxyURL + customLink;
     }
     else{heightImg.src = "./images/height/" + charData.id + ".png";}
 }
@@ -617,7 +618,7 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
         document.getElementById('removeTolerance'  + targetCanv).value = 0;
     }
 
-    img.src = customLink;
+    img.src = corsProxyURL + customLink;
 
 }
 
