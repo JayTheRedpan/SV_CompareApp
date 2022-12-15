@@ -542,7 +542,7 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
 
         //reset background filtering
         document.getElementById('removeBGColorCheck'  + targetCanv).checked = false;
-        document.getElementById('removeTolerance'  + targetCanv).value = 0;
+        document.getElementById('removeTolerance'  + targetCanv).value = 10;
     }
 
     var cropTop = parseFloat(document.getElementById('cropImageT' + targetCanv).value)/100;
@@ -623,7 +623,7 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
 
         //reset background filtering
         document.getElementById('removeBGColorCheck'  + targetCanv).checked = false;
-        document.getElementById('removeTolerance'  + targetCanv).value = 0;
+        document.getElementById('removeTolerance'  + targetCanv).value = 10;
     }
 
     img.src = customLink;
