@@ -419,6 +419,8 @@ function getHeightImg(save = false){
     const canvas2 = document.getElementById('height2Canvas');
     const clipboardCanvas = document.createElement("canvas");
     const ctx = clipboardCanvas.getContext("2d");
+    const addBG = document.getElementById('addHeightBGCheck').checked;
+    const bgColor = document.getElementById('heightBGColor').value;
 
     var headerHeight; //percent
     var headerLowerMargin; //percent
@@ -438,6 +440,12 @@ function getHeightImg(save = false){
     
     if(canvas1.height > canvas2.height){
         clipboardCanvas.height = canvas1.height * (1 + (headerHeight/100));
+
+        //draw BG Color
+        if(addBG){
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, clipboardCanvas.width, clipboardCanvas.height);
+        }
 
         //draw characters
         ctx.drawImage(canvas1, 0, canvas1.height * (headerHeight/100));
@@ -461,10 +469,15 @@ function getHeightImg(save = false){
     else{
         clipboardCanvas.height = canvas2.height * (1 + (headerHeight/100));
 
+        //draw BG Color
+        if(addBG){
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, clipboardCanvas.width, clipboardCanvas.height);
+        }
+
         //draw characters
         ctx.drawImage(canvas1, 0, clipboardCanvas.height - canvas1.height);
         ctx.drawImage(canvas2, canvas1.width, canvas2.height * (headerHeight/100));
-
 
         //draw header bar
         ctx.fillStyle = '#FAEBD7';
