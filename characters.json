@@ -416,8 +416,8 @@
         "id": "zayno",
         "display_name": "Zayno",
         "species": "bunny",
-        "height": 60,
-        "ref_height": 60,
+        "height": 59,
+        "ref_height": 59,
         "height_correction": 1,
         "length": 8
     },
