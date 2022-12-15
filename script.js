@@ -501,7 +501,7 @@ function openCustomTab(customTab){
     document.getElementById('custom1Button').style.color = '#000';
     document.getElementById('custom2Button').style.color = '#000';
 
-    document.getElementById('custom' + customTab).style.display = 'block';
+    document.getElementById('custom' + customTab).style.display = 'flex';
     document.getElementById('custom' + customTab + 'Button').style.color = 'blue';
 }
 
