@@ -404,6 +404,79 @@ function updateHeightBG(){
     bg1.style.backgroundColor = bgColor;
     bg2.style.backgroundColor = bgColor;
 }
+
+function getHeightImg(save = false){
+    const canvas1 = document.getElementById('height1Canvas');
+    const canvas2 = document.getElementById('height2Canvas');
+    const clipboardCanvas = document.createElement("canvas");
+    const ctx = clipboardCanvas.getContext("2d");
+
+    var headerHeight; //percent
+    var headerLowerMargin; //percent
+    var textPercentofHeight = 3;
+
+    if(addHeightHeaderCheck.checked){
+        headerHeight = 20;
+        headerLowerMargin = 5;
+    }
+    else{
+        headerHeight = 0;
+        headerLowerMargin = 0;
+    }
+
+    //set clip canvas dimensions and draw characters
+    clipboardCanvas.width = canvas1.width + canvas2.width;
+    
+    if(canvas1.height > canvas2.height){
+        clipboardCanvas.height = canvas1.height * (1 + (headerHeight/100));
+
+        //draw characters
+        ctx.drawImage(canvas1, 0, canvas1.height * (headerHeight/100));
+        ctx.drawImage(canvas2, canvas1.width, clipboardCanvas.height - canvas2.height);
+
+        //draw header bar
+        ctx.fillStyle = '#FAEBD7';
+        ctx.fillRect(0, 0, clipboardCanvas.width, canvas1.height * ((headerHeight - headerLowerMargin)/100));
+
+        //draw character info
+        ctx.font = Math.round(textPercentofHeight / 100 * clipboardCanvas.height) + "px Arial";
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        //character 1
+        ctx.fillText(char1.display_name, clipboardCanvas.width/3, canvas1.height * ((headerHeight - headerLowerMargin)/300));
+        ctx.fillText(Math.floor(char1.height/12) + "' " + char1.height % 12 + '"', clipboardCanvas.width/3, canvas1.height * (2 * (headerHeight - headerLowerMargin)/300));
+        //character 2
+        ctx.fillText(char2.display_name, (2 * clipboardCanvas.width)/3, canvas1.height * ((headerHeight - headerLowerMargin)/300));
+        ctx.fillText(Math.floor(char2.height/12) + "' " + char2.height % 12 + '"', (2 * clipboardCanvas.width)/3, canvas1.height * (2 * (headerHeight - headerLowerMargin)/300));
+    }
+    else{
+        clipboardCanvas.height = canvas2.height * (1 + (headerHeight/100));
+
+        //draw characters
+        ctx.drawImage(canvas1, 0, clipboardCanvas.height - canvas1.height);
+        ctx.drawImage(canvas2, canvas1.width, canvas2.height * (headerHeight/100));
+
+
+        //draw header bar
+        ctx.fillStyle = '#FAEBD7';
+        ctx.fillRect(0, 0, clipboardCanvas.width, canvas2.height * ((headerHeight - headerLowerMargin)/100));
+
+        //draw character info
+        ctx.font = Math.round(textPercentofHeight / 100 * clipboardCanvas.height) + "px Arial";
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        //character 1
+        ctx.fillText(char1.display_name, clipboardCanvas.width/3, canvas2.height * ((headerHeight - headerLowerMargin)/300));
+        ctx.fillText(Math.floor(char1.height/12) + "' " + char1.height % 12 + '"', clipboardCanvas.width/3, canvas2.height * (2 * (headerHeight - headerLowerMargin)/300));
+        //character 2
+        ctx.fillText(char2.display_name, (2 * clipboardCanvas.width)/3, canvas2.height * ((headerHeight - headerLowerMargin)/300));
+        ctx.fillText(Math.floor(char2.height/12) + "' " + char2.height % 12 + '"', (2 * clipboardCanvas.width)/3, canvas2.height * (2 * (headerHeight - headerLowerMargin)/300));
+    }
+
+    //copy/save canvas to clipboard
+    if(save){downloadCanvas(clipboardCanvas);}
+    else{copyCanvasToClipboard(clipboardCanvas);}
+}
 //-------- Length Tab Stuff -----------------
 
 
@@ -563,6 +636,39 @@ function filterFromCanvas(canvas, R, G, B, tolerance = 0){
     }
 
     ctx.putImageData(imgData, 0, 0);
+}
+
+function downloadCanvas(canvas){  
+    // get canvas data  
+    var image = canvas.toDataURL();  
+  
+    // create temporary link  
+    var tmpLink = document.createElement( 'a' );  
+    tmpLink.download = 'image.png'; // set the name of the download file 
+    tmpLink.href = image;  
+  
+    // temporarily add link to body and initiate the download  
+    document.body.appendChild( tmpLink );  
+    tmpLink.click();  
+    document.body.removeChild( tmpLink );  
+}
+
+function copyCanvasToClipboard(canvas){
+    const blob = canvasToBlob(canvas);
+    const item = new ClipboardItem({ "image/png": blob });
+    
+    navigator.clipboard.write([item]);
+}
+
+function canvasToBlob(canvas){
+    const ctx = canvas.getContext("2d");
+
+    return new Promise(resolve => {
+        canvas.toBlob((blob) => {
+        // here the image is a blob
+        resolve(blob)
+        }, "image/png", 0.75);
+    })
 }
 
 async function getJSON(path) {

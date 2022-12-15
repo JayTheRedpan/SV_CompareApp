@@ -36,6 +36,10 @@
         <div class="tab" id="heightTab">
             <input type="range" min="0.5" max = 10.5 value="1" id="zoomRange" onchange="adjustZoom()" />
             <input type="color" id="heightBGColor" value="#FAEBD7" oninput="updateHeightBG()"/>
+            <button id="copyHeightButton" onclick="getHeightImg(false)"><i class="fa fa-clone" aria-hidden="true"></i></button>
+            <button id="saveHeightButton" onclick="getHeightImg(true)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+            <label for="addHeightHeaderCheck">Add Header to Copy/Save:</label>
+            <input type="checkbox" id="addHeightHeaderCheck">
             <table>
                 <colgroup>
                     <col span="1" style="width: 50%;" id="char1HeightCol">
