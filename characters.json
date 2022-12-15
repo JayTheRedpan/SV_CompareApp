@@ -411,5 +411,32 @@
         "ref_height": 132,
         "height_correction": 1,
         "length": 36
+    },
+    {
+        "id": "zayno",
+        "display_name": "Zayno",
+        "species": "bunny",
+        "height": 60,
+        "ref_height": 60,
+        "height_correction": 1,
+        "length": 8
+    },
+    {
+        "id": "waffle",
+        "display_name": "Waffle",
+        "species": "kobold",
+        "height": 48,
+        "ref_height": 48,
+        "height_correction": 1,
+        "length": 8
+    },
+    {
+        "id": "yana",
+        "display_name": "Yana",
+        "species": "white tiger",
+        "height": 180,
+        "ref_height": 180,
+        "height_correction": 1,
+        "length": 47
     }
 ]
