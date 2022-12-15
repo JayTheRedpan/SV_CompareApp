@@ -144,7 +144,7 @@ function updateCharHeight(targetChar){
     //update image
     if((charData.id == "custom1" || charData.id == "custom2") && customLink != ''){
         heightImg.crossorigin="anonymous";
-        //heightImg.src = customLink;
+        heightImg.src = customLink;
     }
     else{heightImg.src = "./images/height/" + charData.id + ".png";}
 }
