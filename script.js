@@ -1,6 +1,7 @@
  //-------- Global Variables -----------
  var charactersData;
  var corsProxyURL = "https://api.codetabs.com/v1/proxy?quest=";
+ var activeTab = "";
  var char1 = {
     "id": "blank",        
     "display_name": "Select a Character",
@@ -86,8 +87,10 @@ function updateCharacter(targetChar, log = true){
     }
 
     //update character height image/stats
-    updateCharHeight(targetChar);
-    //adjustHeightWidths();
+    if(activeTab == "height"){
+        updateCharHeight(targetChar);
+        //adjustHeightWidths();
+    }
 
     //update character length images/stats
 
@@ -119,6 +122,8 @@ function openTab(tabName){
 
     document.getElementById(tabName + 'Tab').style.display = 'block';
     document.getElementById(tabName + 'Button').style.color = 'blue';
+
+    activeTab = tabName;
 }
 //-------- Height Tab Stuff -----------------
 
@@ -144,8 +149,11 @@ function updateCharHeight(targetChar){
     
     //update image
     if((charData.id == "custom1" || charData.id == "custom2") && customLink != ''){
-        //heightImg.crossorigin="anonymous";
-        heightImg.src = corsProxyURL + customLink;
+        //add check to reduce proxy calls
+        if(heightImg.src != corsProxyURL + customLink){
+            heightImg.src = corsProxyURL + customLink;
+        }
+        else{drawHeights();}
     }
     else{heightImg.src = "./images/height/" + charData.id + ".png";}
 }
@@ -618,7 +626,7 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
         document.getElementById('removeTolerance'  + targetCanv).value = 0;
     }
 
-    img.src = corsProxyURL + customLink;
+    img.src = customLink;
 
 }
 
