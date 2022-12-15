@@ -148,7 +148,7 @@ function updateCharHeight(targetChar){
     document.getElementById('char' + targetChar +'Height').innerHTML += charData.height % 12 + '"';
     
     //update image
-    if((charData.id == "custom1" || charData.id == "custom2") && customLink != '' && customElement.charAt(0) != "."){
+    if((charData.id == "custom1" || charData.id == "custom2") && customLink != '' && customLink.charAt(0) != "."){
         //add check to reduce proxy calls
         if(heightImg.src != corsProxyURL + customLink){
             heightImg.src = corsProxyURL + customLink;
