@@ -1,10 +1,16 @@
-#clip{
-    clip-path: inset(10% 10% 10% 10%);
-}
+/* * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+} */
 
 body{
     background-color: antiquewhite;
     
+}
+
+.inputPair{
+    display:flex;
 }
 
 /* -- Logo Div -- */
@@ -124,16 +130,51 @@ table {
     font-weight: bold;
 }
 
+.customSubTabButtons{
+    display: flex;
+    border-bottom: 1px solid black;
+}
+
+.customSubTabButtons button{
+    background: transparent;
+    border: 1px solid black;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 100px;
+}
+
+.customSubTabs{
+    height: 500px;
+}
+
+.customHeightTab{
+    display:flex;
+    height: 100%;
+}
+
+.customHeightControls{
+    display: block;
+    width: 25%;
+    height: 100%;
+}
+
+.customHeightControls input{
+    border-radius: 5px;
+}
+
+.customCanvasContainer{
+    width: 75%;
+    height: 100%;
+    text-align:center;
+}
+
 .customCanvas{
     border: 2px solid black;
-}
-
-.customLeft{
-    width: 50%;
-}
-
-.customRight{
-    width: 50%;
+    display: inline;
 }
 
 /* Tools */

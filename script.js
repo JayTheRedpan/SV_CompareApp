@@ -144,14 +144,14 @@ function updateCharHeight(targetChar){
 
     //update stats
     document.getElementById('char' + targetChar +'Name').innerHTML = charData.display_name;
-    document.getElementById('char' + targetChar +'Height').innerHTML = Math.floor(charData.height/12) + "' ";
-    document.getElementById('char' + targetChar +'Height').innerHTML += charData.height % 12 + '"';
+    document.getElementById('char' + targetChar +'Height').innerHTML = inchesToText(charData.height);
     
     //update image
     if((charData.id == "custom1" || charData.id == "custom2") && customLink != ''){
         //add check to reduce proxy calls
         if(heightImg.src != corsProxyURL + customLink){
             heightImg.src = corsProxyURL + customLink;
+            console.log('PROXY HIT');
         }
         else{drawHeights();}
     }
@@ -170,6 +170,12 @@ function drawHeights(manualZoom = 0){
     var cropRight;
     var cropBottom;
     var cropLeft;
+
+    //update images if using custom
+    // if(char1.id == 'custom1' && document.getElementById('customHeightImageURL1').value != ''){img1 = customImage1;}
+    // else if(char1.id == 'custom2' && document.getElementById('customHeightImageURL2').value != ''){img1 = customImage2;}
+    // else if(char2.id == 'custom1' && document.getElementById('customHeightImageURL1').value != ''){img2 = customImage1;}
+    // else if(char2.id == 'custom2' && document.getElementById('customHeightImageURL2').value != ''){img2 = customImage1;}
 
     //clear canvas
     ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
@@ -286,6 +292,12 @@ function scaleHeightCanvases(manualZoom){
     var img2 = document.getElementById('height2Img');
     var maxSize;
     var zoom;
+
+    //update images if using custom
+    // if(char1.id == 'custom1' && document.getElementById('customHeightImageURL1').value != ''){img1 = customImage1;}
+    // else if(char1.id == 'custom2' && document.getElementById('customHeightImageURL2').value != ''){img1 = customImage2;}
+    // else if(char2.id == 'custom1' && document.getElementById('customHeightImageURL1').value != ''){img2 = customImage1;}
+    // else if(char2.id == 'custom2' && document.getElementById('customHeightImageURL2').value != ''){img2 = customImage1;}
 
     //find larger characters height
     if (char1Height > char2Height){maxSize = char1Height;}
@@ -461,10 +473,10 @@ function getHeightImg(save = false){
         ctx.textAlign = "center";
         //character 1
         ctx.fillText(char1.display_name, clipboardCanvas.width/3, canvas1.height * ((headerHeight - headerLowerMargin)/300));
-        ctx.fillText(Math.floor(char1.height/12) + "' " + char1.height % 12 + '"', clipboardCanvas.width/3, canvas1.height * (2 * (headerHeight - headerLowerMargin)/300));
+        ctx.fillText(inchesToText(char1.height), clipboardCanvas.width/3, canvas1.height * (2 * (headerHeight - headerLowerMargin)/300));
         //character 2
         ctx.fillText(char2.display_name, (2 * clipboardCanvas.width)/3, canvas1.height * ((headerHeight - headerLowerMargin)/300));
-        ctx.fillText(Math.floor(char2.height/12) + "' " + char2.height % 12 + '"', (2 * clipboardCanvas.width)/3, canvas1.height * (2 * (headerHeight - headerLowerMargin)/300));
+        ctx.fillText(inchesToText(char2.height), (2 * clipboardCanvas.width)/3, canvas1.height * (2 * (headerHeight - headerLowerMargin)/300));
     }
     else{
         clipboardCanvas.height = canvas2.height * (1 + (headerHeight/100));
@@ -489,10 +501,10 @@ function getHeightImg(save = false){
         ctx.textAlign = "center";
         //character 1
         ctx.fillText(char1.display_name, clipboardCanvas.width/3, canvas2.height * ((headerHeight - headerLowerMargin)/300));
-        ctx.fillText(Math.floor(char1.height/12) + "' " + char1.height % 12 + '"', clipboardCanvas.width/3, canvas2.height * (2 * (headerHeight - headerLowerMargin)/300));
+        ctx.fillText(inchesToText(char1.height), clipboardCanvas.width/3, canvas2.height * (2 * (headerHeight - headerLowerMargin)/300));
         //character 2
         ctx.fillText(char2.display_name, (2 * clipboardCanvas.width)/3, canvas2.height * ((headerHeight - headerLowerMargin)/300));
-        ctx.fillText(Math.floor(char2.height/12) + "' " + char2.height % 12 + '"', (2 * clipboardCanvas.width)/3, canvas2.height * (2 * (headerHeight - headerLowerMargin)/300));
+        ctx.fillText(inchesToText(char2.height), (2 * clipboardCanvas.width)/3, canvas2.height * (2 * (headerHeight - headerLowerMargin)/300));
     }
 
     //copy/save canvas to clipboard
@@ -514,8 +526,19 @@ function openCustomTab(customTab){
     document.getElementById('custom1Button').style.color = '#000';
     document.getElementById('custom2Button').style.color = '#000';
 
-    document.getElementById('custom' + customTab).style.display = 'flex';
+    document.getElementById('custom' + customTab).style.display = 'block';
     document.getElementById('custom' + customTab + 'Button').style.color = 'blue';
+}
+
+function openCustomSubTab(tab, subTab){
+    document.getElementById('customHeightTab' + tab).style.display = 'none';
+    document.getElementById('customLengthTab' + tab).style.display = 'none';
+
+    document.getElementById('customHeightButton' + tab).style.color = '#000';
+    document.getElementById('customLengthButton' + tab).style.color = '#000';
+
+    document.getElementById('custom' + subTab + 'Tab' + tab).style.display = 'flex';
+    document.getElementById('custom' + subTab + 'Button' + tab).style.color = 'blue';
 }
 
 function updateHeightPreview(){
@@ -523,21 +546,17 @@ function updateHeightPreview(){
     if(document.getElementById('customHeightImageURL2').value != ''){updateHeightPreviewCanvas(2);}
 }
 
-function adjustCrop(targetCrop, barToBox = true){
+function adjustCrop(targetCrop){
     const cropBox = document.getElementById('cropImage' + targetCrop);
-    const cropBar = document.getElementById('cropImageRange' + targetCrop);
 
-    if(barToBox){cropBox.value = cropBar.value;}
-    else{cropBar.value = cropBox.value;}
-
-    updateHeightPreview(targetCrop.charAt(1));
+    updateHeightPreviewCanvas(targetCrop.charAt(1));
 }
 
 function updateHeightPreviewCanvas(targetCanv, resetControls = false){
     const canvas = document.getElementById('customHeightPreviewCanvas' + targetCanv);
     const ctx = canvas.getContext('2d');
     const customLink = document.getElementById('customHeightImageURL' + targetCanv).value;
-    const container = document.getElementById('customRight' + targetCanv);
+    const container = document.getElementById('customCanvasContainer' + targetCanv);
 
     //reset controls if new image
     if(resetControls){
@@ -546,12 +565,6 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
         document.getElementById('cropImageR' + targetCanv).value = 0;
         document.getElementById('cropImageB' + targetCanv).value = 0;
         document.getElementById('cropImageL' + targetCanv).value = 0;
-
-        //reset crop sliders
-        document.getElementById('cropImageRangeT' + targetCanv).value = 0;
-        document.getElementById('cropImageRangeR' + targetCanv).value = 0;
-        document.getElementById('cropImageRangeB' + targetCanv).value = 0;
-        document.getElementById('cropImageRangeL' + targetCanv).value = 0;
 
         //reset background filtering
         document.getElementById('removeBGColorCheck'  + targetCanv).checked = false;
@@ -566,16 +579,31 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
     //drawing image to preview canvas
     var img = new Image();
     img.onload = function () {
-        //resize preview canvas based on image dimensions.  
-        //Determine its biggest dimension, then scale the canvas to it inside the div
+        // resize preview canvas based on image dimensions.  
+        // Determine its biggest dimension, then scale the canvas to it inside the div
         if(img.width > img.height){
-            canvas.width = parseFloat(container.clientWidth) * 0.95;
+            canvas.width = container.clientWidth;
             canvas.height = (parseFloat(img.height) / parseFloat(img.width)) * parseFloat(canvas.width);
         }
         else{
-            canvas.height = parseFloat(container.clientHeight) * 0.95;
+            canvas.height = container.clientHeight;
             canvas.width = (parseFloat(img.width) / parseFloat(img.height)) * parseFloat(canvas.height);
         }
+        //check for overflow
+        while(canvas.height > container.clientHeight || canvas.width > container.clientWidth){
+            canvas.width *= 0.99;
+            canvas.height *= 0.99;
+        }
+
+        //enable image controls
+        document.getElementById('cropImageT' + targetCanv).disabled = false;
+        document.getElementById('cropImageR' + targetCanv).disabled = false;
+        document.getElementById('cropImageB' + targetCanv).disabled = false;
+        document.getElementById('cropImageL' + targetCanv).disabled = false;
+        document.getElementById('customHeightCorrect' + targetCanv).disabled = false;
+        document.getElementById('removeBGColorCheck' + targetCanv).disabled = false;
+        document.getElementById('removeBGColor' + targetCanv).disabled = false;
+        document.getElementById('removeTolerance' + targetCanv).disabled = false;
 
         //draw image to preview canvas
         ctx.drawImage(
@@ -608,13 +636,14 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
     //handle bad image links
     img.onerror = function () {
         //reset canvas size
-        canvas.width = 100;
-        canvas.height = 100;
+        canvas.width = container.clientWidth * 0.95;
+        canvas.height = container.clientHeight * 0.95;
         
         //clear canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         //tell user it was a bad url
+        ctx.font = Math.round(0.04 * canvas.height) + "px Arial";
         ctx.fillStyle = "red";
         ctx.textAlign = "center";
         ctx.fillText("Bad Image URL", canvas.width/2, canvas.height/2);
@@ -622,21 +651,24 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
         //blank url
         document.getElementById('customHeightImageURL' + targetCanv).value = '';
 
-        //reset crop fields
+        //reset image controls
         document.getElementById('cropImageT' + targetCanv).value = 0;
         document.getElementById('cropImageR' + targetCanv).value = 0;
         document.getElementById('cropImageB' + targetCanv).value = 0;
         document.getElementById('cropImageL' + targetCanv).value = 0;
-
-        //reset crop sliders
-        document.getElementById('cropImageRangeT' + targetCanv).value = 0;
-        document.getElementById('cropImageRangeR' + targetCanv).value = 0;
-        document.getElementById('cropImageRangeB' + targetCanv).value = 0;
-        document.getElementById('cropImageRangeL' + targetCanv).value = 0;
-
-        //reset background filtering
+        document.getElementById('customHeightCorrect' + targetCanv).value = 100;
         document.getElementById('removeBGColorCheck'  + targetCanv).checked = false;
         document.getElementById('removeTolerance'  + targetCanv).value = 10;
+
+        //disable image controls
+        document.getElementById('cropImageT' + targetCanv).disabled = true;
+        document.getElementById('cropImageR' + targetCanv).disabled = true;
+        document.getElementById('cropImageB' + targetCanv).disabled = true;
+        document.getElementById('cropImageL' + targetCanv).disabled = true;
+        document.getElementById('customHeightCorrect' + targetCanv).disabled = true;
+        document.getElementById('removeBGColorCheck' + targetCanv).disabled = true;
+        document.getElementById('removeBGColor' + targetCanv).disabled = true;
+        document.getElementById('removeTolerance' + targetCanv).disabled = true;
     }
 
     img.src = customLink;
@@ -691,6 +723,24 @@ function canvasToBlob(canvas){
         resolve(blob)
         }, "image/png", 0.75);
     })
+}
+
+function imageToCanvas(img, canvas){
+    const ctx = canvas.getContext("2d");
+
+    //clear canvas
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    //size canvas to image size
+    canvas.height = img.height;
+    canvas.width = img.width;
+
+    //draw image to canvas
+    ctx.drawImage(img, 0, 0);
+}
+
+function inchesToText(inches){
+    return (Math.floor(inches/12) + "' " + inches % 12 + '"')
 }
 
 async function getJSON(path) {
@@ -752,3 +802,6 @@ async function loadCharacters(){
 
 loadCharacters();
 openTab('height');
+openCustomTab(1);
+openCustomSubTab(1, 'Height');
+openCustomSubTab(2, 'Height');
