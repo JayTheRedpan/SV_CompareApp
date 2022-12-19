@@ -1,7 +1,10 @@
  //-------- Global Variables -----------
  var charactersData;
- var corsProxyURL = "https://api.codetabs.com/v1/proxy?quest=";
+var corsProxyURL = 'https://corsproxy.io/?';  //add URLencoded: + encodeURIComponent('https://api.domain.com/...')
+ //var corsProxyURL = "https://api.codetabs.com/v1/proxy?quest="; //old proxy
  var activeTab = "";
+ var h1PreviewShapes = [];
+ var h2PreviewShapes = [];
  var char1 = {
     "id": "blank",        
     "display_name": "Select a Character",
@@ -149,8 +152,8 @@ function updateCharHeight(targetChar){
     //update image
     if((charData.id == "custom1" || charData.id == "custom2") && customLink != ''){
         //add check to reduce proxy calls
-        if(heightImg.src != corsProxyURL + customLink){
-            heightImg.src = corsProxyURL + customLink;
+        if(heightImg.src != corsProxyURL + encodeURIComponent(customLink)){
+            heightImg.src = corsProxyURL + encodeURIComponent(customLink);
             console.log('PROXY HIT');
         }
         else{drawHeights();}
@@ -170,12 +173,6 @@ function drawHeights(manualZoom = 0){
     var cropRight;
     var cropBottom;
     var cropLeft;
-
-    //update images if using custom
-    // if(char1.id == 'custom1' && document.getElementById('customHeightImageURL1').value != ''){img1 = customImage1;}
-    // else if(char1.id == 'custom2' && document.getElementById('customHeightImageURL2').value != ''){img1 = customImage2;}
-    // else if(char2.id == 'custom1' && document.getElementById('customHeightImageURL1').value != ''){img2 = customImage1;}
-    // else if(char2.id == 'custom2' && document.getElementById('customHeightImageURL2').value != ''){img2 = customImage1;}
 
     //clear canvas
     ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
@@ -198,10 +195,10 @@ function drawHeights(manualZoom = 0){
     //draw character 1
     toFilterColor = false;
     if (char1.id == 'custom1' && document.getElementById('customHeightImageURL1').value != ''){
-        cropTop = parseFloat(document.getElementById('cropImageT1').value)/100;
-        cropRight = parseFloat(document.getElementById('cropImageR1').value)/100;
-        cropBottom = parseFloat(document.getElementById('cropImageB1').value)/100;
-        cropLeft = parseFloat(document.getElementById('cropImageL1').value)/100;
+        cropTop = parseFloat(document.getElementById('cropHeightImageT1').value)/100;
+        cropRight = parseFloat(document.getElementById('cropHeightImageR1').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropHeightImageB1').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropHeightImageL1').value)/100;
         toFilterColor = document.getElementById('removeBGColorCheck1').checked;
         filterR = parseInt(document.getElementById('removeBGColor1').value.substring(1, 3), 16);
         filterG = parseInt(document.getElementById('removeBGColor1').value.substring(3, 5), 16);
@@ -209,10 +206,10 @@ function drawHeights(manualZoom = 0){
         tolerance = parseFloat(document.getElementById('removeTolerance1').value);
     }
     else if (char1.id == 'custom2' && document.getElementById('customHeightImageURL2').value != ''){
-        cropTop = parseFloat(document.getElementById('cropImageT2').value)/100;
-        cropRight = parseFloat(document.getElementById('cropImageR2').value)/100;
-        cropBottom = parseFloat(document.getElementById('cropImageB2').value)/100;
-        cropLeft = parseFloat(document.getElementById('cropImageL2').value)/100;
+        cropTop = parseFloat(document.getElementById('cropHeightImageT2').value)/100;
+        cropRight = parseFloat(document.getElementById('cropHeightImageR2').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropHeightImageB2').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropHeightImageL2').value)/100;
         toFilterColor = document.getElementById('removeBGColorCheck2').checked;
         filterR = parseInt(document.getElementById('removeBGColor2').value.substring(1, 3), 16);
         filterG = parseInt(document.getElementById('removeBGColor2').value.substring(3, 5), 16);
@@ -241,10 +238,10 @@ function drawHeights(manualZoom = 0){
     //draw character 2
     toFilterColor = false;
     if (char2.id == 'custom1' && document.getElementById('customHeightImageURL1').value != ''){
-        cropTop = parseFloat(document.getElementById('cropImageT1').value)/100;
-        cropRight = parseFloat(document.getElementById('cropImageR1').value)/100;
-        cropBottom = parseFloat(document.getElementById('cropImageB1').value)/100;
-        cropLeft = parseFloat(document.getElementById('cropImageL1').value)/100;
+        cropTop = parseFloat(document.getElementById('cropHeightImageT1').value)/100;
+        cropRight = parseFloat(document.getElementById('cropHeightImageR1').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropHeightImageB1').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropHeightImageL1').value)/100;
         toFilterColor = document.getElementById('removeBGColorCheck1').checked;
         filterR = parseInt(document.getElementById('removeBGColor1').value.substring(1, 3), 16);
         filterG = parseInt(document.getElementById('removeBGColor1').value.substring(3, 5), 16);
@@ -252,10 +249,10 @@ function drawHeights(manualZoom = 0){
         tolerance = parseFloat(document.getElementById('removeTolerance1').value);
     }
     else if (char2.id == 'custom2' && document.getElementById('customHeightImageURL2').value != ''){
-        cropTop = parseFloat(document.getElementById('cropImageT2').value)/100;
-        cropRight = parseFloat(document.getElementById('cropImageR2').value)/100;
-        cropBottom = parseFloat(document.getElementById('cropImageB2').value)/100;
-        cropLeft = parseFloat(document.getElementById('cropImageL2').value)/100;
+        cropTop = parseFloat(document.getElementById('cropHeightImageT2').value)/100;
+        cropRight = parseFloat(document.getElementById('cropHeightImageR2').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropHeightImageB2').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropHeightImageL2').value)/100;
         toFilterColor = document.getElementById('removeBGColorCheck2').checked;
         filterR = parseInt(document.getElementById('removeBGColor2').value.substring(1, 3), 16);
         filterG = parseInt(document.getElementById('removeBGColor2').value.substring(3, 5), 16);
@@ -324,16 +321,16 @@ function scaleHeightCanvases(manualZoom){
 
     //canvas 1
     if (char1.id == 'custom1'){
-        cropTop = parseFloat(document.getElementById('cropImageT1').value)/100;
-        cropRight = parseFloat(document.getElementById('cropImageR1').value)/100;
-        cropBottom = parseFloat(document.getElementById('cropImageB1').value)/100;
-        cropLeft = parseFloat(document.getElementById('cropImageL1').value)/100;
+        cropTop = parseFloat(document.getElementById('cropHeightImageT1').value)/100;
+        cropRight = parseFloat(document.getElementById('cropHeightImageR1').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropHeightImageB1').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropHeightImageL1').value)/100;
     }
     else if (char1.id == 'custom2'){
-        cropTop = parseFloat(document.getElementById('cropImageT2').value)/100;
-        cropRight = parseFloat(document.getElementById('cropImageR2').value)/100;
-        cropBottom = parseFloat(document.getElementById('cropImageB2').value)/100;
-        cropLeft = parseFloat(document.getElementById('cropImageL2').value)/100;
+        cropTop = parseFloat(document.getElementById('cropHeightImageT2').value)/100;
+        cropRight = parseFloat(document.getElementById('cropHeightImageR2').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropHeightImageB2').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropHeightImageL2').value)/100;
     }
     else{
         cropTop = 0;
@@ -346,16 +343,16 @@ function scaleHeightCanvases(manualZoom){
 
      //canvas 1
      if (char2.id == 'custom1'){
-        cropTop = parseFloat(document.getElementById('cropImageT1').value)/100;
-        cropRight = parseFloat(document.getElementById('cropImageR1').value)/100;
-        cropBottom = parseFloat(document.getElementById('cropImageB1').value)/100;
-        cropLeft = parseFloat(document.getElementById('cropImageL1').value)/100;
+        cropTop = parseFloat(document.getElementById('cropHeightImageT1').value)/100;
+        cropRight = parseFloat(document.getElementById('cropHeightImageR1').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropHeightImageB1').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropHeightImageL1').value)/100;
     }
     else if (char2.id == 'custom2'){
-        cropTop = parseFloat(document.getElementById('cropImageT2').value)/100;
-        cropRight = parseFloat(document.getElementById('cropImageR2').value)/100;
-        cropBottom = parseFloat(document.getElementById('cropImageB2').value)/100;
-        cropLeft = parseFloat(document.getElementById('cropImageL2').value)/100;
+        cropTop = parseFloat(document.getElementById('cropHeightImageT2').value)/100;
+        cropRight = parseFloat(document.getElementById('cropHeightImageR2').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropHeightImageB2').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropHeightImageL2').value)/100;
     }
     else{
         cropTop = 0;
@@ -432,13 +429,14 @@ function getHeightImg(save = false){
     const clipboardCanvas = document.createElement("canvas");
     const ctx = clipboardCanvas.getContext("2d");
     const addBG = document.getElementById('addHeightBGCheck').checked;
+    const addHeader = addHeightHeaderCheck.checked;
     const bgColor = document.getElementById('heightBGColor').value;
 
     var headerHeight; //percent
     var headerLowerMargin; //percent
     var textPercentofHeight = 3;
 
-    if(addHeightHeaderCheck.checked){
+    if(addHeader){
         headerHeight = 20;
         headerLowerMargin = 5;
     }
@@ -454,6 +452,7 @@ function getHeightImg(save = false){
         clipboardCanvas.height = canvas1.height * (1 + (headerHeight/100));
 
         //draw BG Color
+        ctx.clearRect(0,0, clipboardCanvas.width, clipboardCanvas.height);
         if(addBG){
             ctx.fillStyle = bgColor;
             ctx.fillRect(0, 0, clipboardCanvas.width, clipboardCanvas.height);
@@ -463,25 +462,30 @@ function getHeightImg(save = false){
         ctx.drawImage(canvas1, 0, canvas1.height * (headerHeight/100));
         ctx.drawImage(canvas2, canvas1.width, clipboardCanvas.height - canvas2.height);
 
-        //draw header bar
-        ctx.fillStyle = '#FAEBD7';
-        ctx.fillRect(0, 0, clipboardCanvas.width, canvas1.height * ((headerHeight - headerLowerMargin)/100));
+        //add header
+        if(addHeader){
+            //draw header bar
+            ctx.fillStyle = '#FAEBD7';
+            ctx.fillRect(0, 0, clipboardCanvas.width, canvas1.height * ((headerHeight - headerLowerMargin)/100));
 
-        //draw character info
-        ctx.font = Math.round(textPercentofHeight / 100 * clipboardCanvas.height) + "px Arial";
-        ctx.fillStyle = "black";
-        ctx.textAlign = "center";
-        //character 1
-        ctx.fillText(char1.display_name, clipboardCanvas.width/3, canvas1.height * ((headerHeight - headerLowerMargin)/300));
-        ctx.fillText(inchesToText(char1.height), clipboardCanvas.width/3, canvas1.height * (2 * (headerHeight - headerLowerMargin)/300));
-        //character 2
-        ctx.fillText(char2.display_name, (2 * clipboardCanvas.width)/3, canvas1.height * ((headerHeight - headerLowerMargin)/300));
-        ctx.fillText(inchesToText(char2.height), (2 * clipboardCanvas.width)/3, canvas1.height * (2 * (headerHeight - headerLowerMargin)/300));
+            //draw character info
+            ctx.font = Math.round(textPercentofHeight / 100 * clipboardCanvas.height) + "px Arial";
+            ctx.fillStyle = "black";
+            ctx.textAlign = "center";
+            //character 1
+            ctx.fillText(char1.display_name, clipboardCanvas.width/3, canvas1.height * ((headerHeight - headerLowerMargin)/300));
+            ctx.fillText(inchesToText(char1.height), clipboardCanvas.width/3, canvas1.height * (2 * (headerHeight - headerLowerMargin)/300));
+            //character 2
+            ctx.fillText(char2.display_name, (2 * clipboardCanvas.width)/3, canvas1.height * ((headerHeight - headerLowerMargin)/300));
+            ctx.fillText(inchesToText(char2.height), (2 * clipboardCanvas.width)/3, canvas1.height * (2 * (headerHeight - headerLowerMargin)/300));
+        }
+        
     }
     else{
         clipboardCanvas.height = canvas2.height * (1 + (headerHeight/100));
 
         //draw BG Color
+        ctx.clearRect(0,0, clipboardCanvas.width, clipboardCanvas.height);
         if(addBG){
             ctx.fillStyle = bgColor;
             ctx.fillRect(0, 0, clipboardCanvas.width, clipboardCanvas.height);
@@ -491,20 +495,23 @@ function getHeightImg(save = false){
         ctx.drawImage(canvas1, 0, clipboardCanvas.height - canvas1.height);
         ctx.drawImage(canvas2, canvas1.width, canvas2.height * (headerHeight/100));
 
-        //draw header bar
-        ctx.fillStyle = '#FAEBD7';
-        ctx.fillRect(0, 0, clipboardCanvas.width, canvas2.height * ((headerHeight - headerLowerMargin)/100));
+        //add header
+        if(addHeader){
+            //draw header bar
+            ctx.fillStyle = '#FAEBD7';
+            ctx.fillRect(0, 0, clipboardCanvas.width, canvas2.height * ((headerHeight - headerLowerMargin)/100));
 
-        //draw character info
-        ctx.font = Math.round(textPercentofHeight / 100 * clipboardCanvas.height) + "px Arial";
-        ctx.fillStyle = "black";
-        ctx.textAlign = "center";
-        //character 1
-        ctx.fillText(char1.display_name, clipboardCanvas.width/3, canvas2.height * ((headerHeight - headerLowerMargin)/300));
-        ctx.fillText(inchesToText(char1.height), clipboardCanvas.width/3, canvas2.height * (2 * (headerHeight - headerLowerMargin)/300));
-        //character 2
-        ctx.fillText(char2.display_name, (2 * clipboardCanvas.width)/3, canvas2.height * ((headerHeight - headerLowerMargin)/300));
-        ctx.fillText(inchesToText(char2.height), (2 * clipboardCanvas.width)/3, canvas2.height * (2 * (headerHeight - headerLowerMargin)/300));
+            //draw character info
+            ctx.font = Math.round(textPercentofHeight / 100 * clipboardCanvas.height) + "px Arial";
+            ctx.fillStyle = "black";
+            ctx.textAlign = "center";
+            //character 1
+            ctx.fillText(char1.display_name, clipboardCanvas.width/3, canvas2.height * ((headerHeight - headerLowerMargin)/300));
+            ctx.fillText(inchesToText(char1.height), clipboardCanvas.width/3, canvas2.height * (2 * (headerHeight - headerLowerMargin)/300));
+            //character 2
+            ctx.fillText(char2.display_name, (2 * clipboardCanvas.width)/3, canvas2.height * ((headerHeight - headerLowerMargin)/300));
+            ctx.fillText(inchesToText(char2.height), (2 * clipboardCanvas.width)/3, canvas2.height * (2 * (headerHeight - headerLowerMargin)/300));
+        }
     }
 
     //copy/save canvas to clipboard
@@ -546,10 +553,28 @@ function updateHeightPreview(){
     if(document.getElementById('customHeightImageURL2').value != ''){updateHeightPreviewCanvas(2);}
 }
 
-function adjustCrop(targetCrop){
-    const cropBox = document.getElementById('cropImage' + targetCrop);
+function adjustCrop(cropChar, cropImage, cropDimension){
+    const topCropInput = document.getElementById('crop' + cropImage + 'ImageT' + cropChar);
+    const rightCropInput = document.getElementById('crop' + cropImage + 'ImageR' + cropChar);
+    const bottomCropInput = document.getElementById('crop' + cropImage + 'ImageB' + cropChar);
+    const leftCropInput = document.getElementById('crop' + cropImage + 'ImageL' + cropChar);
+    
+    //check for overflow and adjust
+    if(cropDimension == "T" && (parseFloat(topCropInput.value) + parseFloat(bottomCropInput.value) >= 100)){
+        bottomCropInput.value = 99 - parseFloat(topCropInput.value);
+    }
+    else if(cropDimension == "R" && (parseFloat(rightCropInput.value) + parseFloat(leftCropInput.value) >= 100)){
+        leftCropInput.value = 99 - parseFloat(rightCropInput.value);
+    }
+    else if(cropDimension == "B" && (parseFloat(topCropInput.value) + parseFloat(bottomCropInput.value) >= 100)){
+        topCropInput.value = 99 - parseFloat(bottomCropInput.value);
+    }
+    else if(cropDimension == "L" && (parseFloat(rightCropInput.value) + parseFloat(leftCropInput.value) >= 100)){
+        rightCropInput.value = 99 - parseFloat(leftCropInput.value);
+    }
 
-    updateHeightPreviewCanvas(targetCrop.charAt(1));
+    //update appropriate preview image
+    if(cropImage == 'Height'){updateHeightPreviewCanvas(cropChar);}
 }
 
 function updateHeightPreviewCanvas(targetCanv, resetControls = false){
@@ -561,20 +586,20 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
     //reset controls if new image
     if(resetControls){
         //reset crop fields
-        document.getElementById('cropImageT' + targetCanv).value = 0;
-        document.getElementById('cropImageR' + targetCanv).value = 0;
-        document.getElementById('cropImageB' + targetCanv).value = 0;
-        document.getElementById('cropImageL' + targetCanv).value = 0;
+        document.getElementById('cropHeightImageT' + targetCanv).value = 0;
+        document.getElementById('cropHeightImageR' + targetCanv).value = 0;
+        document.getElementById('cropHeightImageB' + targetCanv).value = 0;
+        document.getElementById('cropHeightImageL' + targetCanv).value = 0;
 
         //reset background filtering
         document.getElementById('removeBGColorCheck'  + targetCanv).checked = false;
         document.getElementById('removeTolerance'  + targetCanv).value = 10;
     }
 
-    var cropTop = parseFloat(document.getElementById('cropImageT' + targetCanv).value)/100;
-    var cropRight = parseFloat(document.getElementById('cropImageR' + targetCanv).value)/100;
-    var cropBottom = parseFloat(document.getElementById('cropImageB' + targetCanv).value)/100;
-    var cropLeft = parseFloat(document.getElementById('cropImageL' + targetCanv).value)/100;
+    var cropTop = parseFloat(document.getElementById('cropHeightImageT' + targetCanv).value)/100;
+    var cropRight = parseFloat(document.getElementById('cropHeightImageR' + targetCanv).value)/100;
+    var cropBottom = parseFloat(document.getElementById('cropHeightImageB' + targetCanv).value)/100;
+    var cropLeft = parseFloat(document.getElementById('cropHeightImageL' + targetCanv).value)/100;
 
     //drawing image to preview canvas
     var img = new Image();
@@ -596,14 +621,20 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
         }
 
         //enable image controls
-        document.getElementById('cropImageT' + targetCanv).disabled = false;
-        document.getElementById('cropImageR' + targetCanv).disabled = false;
-        document.getElementById('cropImageB' + targetCanv).disabled = false;
-        document.getElementById('cropImageL' + targetCanv).disabled = false;
+        document.getElementById('cropHeightImageT' + targetCanv).disabled = false;
+        document.getElementById('cropHeightImageR' + targetCanv).disabled = false;
+        document.getElementById('cropHeightImageB' + targetCanv).disabled = false;
+        document.getElementById('cropHeightImageL' + targetCanv).disabled = false;
         document.getElementById('customHeightCorrect' + targetCanv).disabled = false;
         document.getElementById('removeBGColorCheck' + targetCanv).disabled = false;
         document.getElementById('removeBGColor' + targetCanv).disabled = false;
         document.getElementById('removeTolerance' + targetCanv).disabled = false;
+
+        //if this is a new image, create control shapes, otherwise update their positions
+        if(targetCanv == 1 && h1PreviewShapes.length == 0){h1PreviewShapes = createControlShapes(canvas);}
+        else if(targetCanv == 2 && h2PreviewShapes.length == 0){h2PreviewShapes = createControlShapes(canvas);}
+        else if (targetCanv == 1){h1PreviewShapes = updateShapes(h1PreviewShapes, cropTop, cropRight, cropBottom, cropLeft, canvas);}
+        else if (targetCanv == 2){h2PreviewShapes = updateShapes(h2PreviewShapes, cropTop, cropRight, cropBottom, cropLeft, canvas);}
 
         //draw image to preview canvas
         ctx.drawImage(
@@ -631,6 +662,10 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
         ctx.strokeStyle = '#ff0000'; //color
         ctx.lineWidth = 2; //width
         ctx.stroke();  //draw to canvas
+
+        //draw control shapes
+        if(targetCanv == 1){drawShapesToCanvas(h1PreviewShapes, canvas);}
+        else{drawShapesToCanvas(h2PreviewShapes, canvas);}
     };
     
     //handle bad image links
@@ -648,23 +683,27 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
         ctx.textAlign = "center";
         ctx.fillText("Bad Image URL", canvas.width/2, canvas.height/2);
 
+        //remove control shapes
+        if(targetCanv ==1){h1PreviewShapes = [];}
+        else{h2PreviewShapes = [];}
+
         //blank url
         document.getElementById('customHeightImageURL' + targetCanv).value = '';
 
         //reset image controls
-        document.getElementById('cropImageT' + targetCanv).value = 0;
-        document.getElementById('cropImageR' + targetCanv).value = 0;
-        document.getElementById('cropImageB' + targetCanv).value = 0;
-        document.getElementById('cropImageL' + targetCanv).value = 0;
+        document.getElementById('cropHeightImageT' + targetCanv).value = 0;
+        document.getElementById('cropHeightImageR' + targetCanv).value = 0;
+        document.getElementById('cropHeightImageB' + targetCanv).value = 0;
+        document.getElementById('cropHeightImageL' + targetCanv).value = 0;
         document.getElementById('customHeightCorrect' + targetCanv).value = 100;
         document.getElementById('removeBGColorCheck'  + targetCanv).checked = false;
         document.getElementById('removeTolerance'  + targetCanv).value = 10;
 
         //disable image controls
-        document.getElementById('cropImageT' + targetCanv).disabled = true;
-        document.getElementById('cropImageR' + targetCanv).disabled = true;
-        document.getElementById('cropImageB' + targetCanv).disabled = true;
-        document.getElementById('cropImageL' + targetCanv).disabled = true;
+        document.getElementById('cropHeightImageT' + targetCanv).disabled = true;
+        document.getElementById('cropHeightImageR' + targetCanv).disabled = true;
+        document.getElementById('cropHeightImageB' + targetCanv).disabled = true;
+        document.getElementById('cropHeightImageL' + targetCanv).disabled = true;
         document.getElementById('customHeightCorrect' + targetCanv).disabled = true;
         document.getElementById('removeBGColorCheck' + targetCanv).disabled = true;
         document.getElementById('removeBGColor' + targetCanv).disabled = true;
@@ -673,6 +712,54 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
 
     img.src = customLink;
 
+}
+
+function createControlShapes(canvas){
+    const shapes = [];
+    const shapeSize = Math.max(canvas.width, canvas.height) * 0.04;
+    
+    shapes.push({name: 'top', x: (canvas.width / 2) - (shapeSize/2), y: 0 - (shapeSize/2), height: shapeSize, width: shapeSize, color: 'red'}); //Top
+    shapes.push({name: 'right', x: canvas.width - (shapeSize/2), y: (canvas.height / 2) - (shapeSize/2), height: shapeSize, width: shapeSize, color: 'red'});//Right
+    shapes.push({name: 'bottom', x: (canvas.width / 2) - (shapeSize/2), y: canvas.height - (shapeSize/2), height: shapeSize, width: shapeSize, color: 'red'});//Bottom
+    shapes.push({name: 'left', x: 0 - (shapeSize/2), y: (canvas.height / 2) - (shapeSize/2), height: shapeSize, width: shapeSize, color: 'red'});//Left
+
+    return shapes
+}
+
+function updateShapes(shapes, top, right, bottom, left, canvas){
+    const shapeSize = Math.max(canvas.width, canvas.height) * 0.04;
+
+    for(let shape of shapes){
+        shape.height = shapeSize;
+        shape.width = shapeSize;
+        if(shape.name == 'top'){
+            shape.x = ((((1 - (right + left)) / 2) + left) * canvas.width) - (shape.width/2);
+            shape.y = (top * canvas.height) - (shape.height/2);
+        }
+        else if(shape.name == 'right'){
+            shape.x = ((1 - right) * canvas.width) - (shape.width/2);
+            shape.y = ((((1 - (top + bottom)) / 2) + top) * canvas.height) - (shape.height/2);
+        }
+        else if(shape.name == 'bottom'){
+            shape.x = ((((1 - (right + left)) / 2) + left) * canvas.width) - (shape.width/2);
+            shape.y = ((1 - bottom) * canvas.height) - (shape.height/2);
+        }
+        else if(shape.name == 'left'){
+            shape.x = (left * canvas.width) - (shape.width/2);
+            shape.y = ((((1 - (top + bottom)) / 2) + top) * canvas.height) - (shape.height/2);
+        }
+    }
+
+    return shapes
+}
+
+function drawShapesToCanvas(shapes, canvas){
+    ctx = canvas.getContext("2d");
+    
+    for(let shape of shapes){
+        ctx.fillStyle = shape.color;
+        ctx.fillRect(shape.x, shape.y, shape.width, shape.height);
+    }
 }
 
 //---- Toolbox Functions ----------
