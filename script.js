@@ -3,8 +3,6 @@
 var corsProxyURL = 'https://corsproxy.io/?';  //add URLencoded: + encodeURIComponent('https://api.domain.com/...')
  //var corsProxyURL = "https://api.codetabs.com/v1/proxy?quest="; //old proxy
  var activeTab = "";
- var h1PreviewShapes = [];
- var h2PreviewShapes = [];
  var char1 = {
     "id": "blank",        
     "display_name": "Select a Character",
@@ -525,6 +523,12 @@ function getHeightImg(save = false){
 
 
 //-------- Custom Tab Stuff -----------------
+var h1PreviewShapes = [];
+var h2PreviewShapes = [];
+var clickedShapeIndex = 0;
+var startX = 0;
+var startY = 0;
+var isDragging = false;
 
 function openCustomTab(customTab){
     document.getElementById('custom1').style.display = 'none';
@@ -548,17 +552,13 @@ function openCustomSubTab(tab, subTab){
     document.getElementById('custom' + subTab + 'Button' + tab).style.color = 'blue';
 }
 
-function updateHeightPreview(){
-    if(document.getElementById('customHeightImageURL1').value != ''){updateHeightPreviewCanvas(1);}
-    if(document.getElementById('customHeightImageURL2').value != ''){updateHeightPreviewCanvas(2);}
-}
-
 function adjustCrop(cropChar, cropImage, cropDimension){
     const topCropInput = document.getElementById('crop' + cropImage + 'ImageT' + cropChar);
     const rightCropInput = document.getElementById('crop' + cropImage + 'ImageR' + cropChar);
     const bottomCropInput = document.getElementById('crop' + cropImage + 'ImageB' + cropChar);
     const leftCropInput = document.getElementById('crop' + cropImage + 'ImageL' + cropChar);
-    
+    const canvas = document.getElementById('custom' + cropImage + 'PreviewCanvas' + cropChar);
+
     //check for overflow and adjust
     if(cropDimension == "T" && (parseFloat(topCropInput.value) + parseFloat(bottomCropInput.value) >= 100)){
         bottomCropInput.value = 99 - parseFloat(topCropInput.value);
@@ -572,6 +572,10 @@ function adjustCrop(cropChar, cropImage, cropDimension){
     else if(cropDimension == "L" && (parseFloat(rightCropInput.value) + parseFloat(leftCropInput.value) >= 100)){
         rightCropInput.value = 99 - parseFloat(leftCropInput.value);
     }
+
+    //update control shapes if triggered from input boxes
+    if (cropChar == 1 && cropImage == 'Height'){h1PreviewShapes = updateShapes(h1PreviewShapes, parseInt(topCropInput.value), parseInt(rightCropInput.value), parseInt(bottomCropInput.value), parseInt(leftCropInput.value), canvas);}
+    else if (cropChar == 2 && cropImage == 'Height'){h2PreviewShapes = updateShapes(h2PreviewShapes, parseInt(topCropInput.value), parseInt(rightCropInput.value), parseInt(bottomCropInput.value), parseInt(leftCropInput.value), canvas);}
 
     //update appropriate preview image
     if(cropImage == 'Height'){updateHeightPreviewCanvas(cropChar);}
@@ -630,11 +634,9 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
         document.getElementById('removeBGColor' + targetCanv).disabled = false;
         document.getElementById('removeTolerance' + targetCanv).disabled = false;
 
-        //if this is a new image, create control shapes, otherwise update their positions
+        //if this is a new image, create control shapes
         if(targetCanv == 1 && h1PreviewShapes.length == 0){h1PreviewShapes = createControlShapes(canvas);}
         else if(targetCanv == 2 && h2PreviewShapes.length == 0){h2PreviewShapes = createControlShapes(canvas);}
-        else if (targetCanv == 1){h1PreviewShapes = updateShapes(h1PreviewShapes, cropTop, cropRight, cropBottom, cropLeft, canvas);}
-        else if (targetCanv == 2){h2PreviewShapes = updateShapes(h2PreviewShapes, cropTop, cropRight, cropBottom, cropLeft, canvas);}
 
         //draw image to preview canvas
         ctx.drawImage(
@@ -729,6 +731,11 @@ function createControlShapes(canvas){
 function updateShapes(shapes, top, right, bottom, left, canvas){
     const shapeSize = Math.max(canvas.width, canvas.height) * 0.04;
 
+    top /= 100;
+    right /= 100;
+    bottom /= 100;
+    left /= 100;
+
     for(let shape of shapes){
         shape.height = shapeSize;
         shape.width = shapeSize;
@@ -761,6 +768,127 @@ function drawShapesToCanvas(shapes, canvas){
         ctx.fillRect(shape.x, shape.y, shape.width, shape.height);
     }
 }
+
+let mouseDownPreviewCanvas = function(event){
+    event.preventDefault();
+    var shapes;
+
+    if(this.id == 'customHeightPreviewCanvas1'){shapes = h1PreviewShapes;}
+    else if(this.id == 'customHeightPreviewCanvas2'){shapes = h2PreviewShapes;}
+
+    const rect = this.getBoundingClientRect();
+    startX = parseInt(event.clientX) - rect.left;
+    startY = parseInt(event.clientY) - rect.top;
+
+    let index = 0;
+    for (let shape of shapes){
+        if (isMouseInShape(startX, startY, shape)){
+            clickedShapeIndex = index;
+            isDragging = true;
+        }
+        index++;
+    }
+}
+
+let mouseUpPreviewCanvas = function(event){
+    if(!isDragging){
+        return;
+    }
+
+    //disable dragging trigger
+    event.preventDefault();
+    isDragging = false;
+
+    //update controlshapes for each preview canvas by just triggering the input box function
+    if(this.id == 'customHeightPreviewCanvas1' && document.getElementById('customHeightImageURL1').value != ''){adjustCrop(1, 'Height', 'T');}
+    else if(this.id == 'customHeightPreviewCanvas2' && document.getElementById('customHeightImageURL2').value != ''){adjustCrop(2, 'Height', 'T');}
+}
+
+let mouseMovePreviewCanvas = function(event){
+    if(!isDragging){
+        return;
+    }
+    else {
+        event.preventDefault();
+
+        const rect = this.getBoundingClientRect();
+        let mouseX = parseInt(event.clientX) - rect.left;
+        let mouseY = parseInt(event.clientY) - rect.top;
+
+        let dx = mouseX - startX;
+        let dy = mouseY - startY;
+
+        //get appropriate shapes, and allow them to move only on their particular axis, update the input boxes, then update canvas
+        if(this.id == 'customHeightPreviewCanvas1'){
+            //update appropriate shape with mouse delta, and its corresponding input box
+            if(h1PreviewShapes[clickedShapeIndex].name == 'right'){
+                h1PreviewShapes[clickedShapeIndex].x = Math.min(Math.max(parseInt(h1PreviewShapes[clickedShapeIndex].x + dx), 0 - (h1PreviewShapes[clickedShapeIndex].width / 2)), this.width - (h1PreviewShapes[clickedShapeIndex].width / 2));
+                document.getElementById('cropHeightImageR1').value = parseInt((1 - ((h1PreviewShapes[clickedShapeIndex].x + (h1PreviewShapes[clickedShapeIndex].width / 2)) / this.width)) * 100);
+            
+            }
+            else if(h1PreviewShapes[clickedShapeIndex].name == 'left'){
+                h1PreviewShapes[clickedShapeIndex].x = Math.min(Math.max(parseInt(h1PreviewShapes[clickedShapeIndex].x + dx), 0 - (h1PreviewShapes[clickedShapeIndex].width / 2)), this.width - (h1PreviewShapes[clickedShapeIndex].width / 2));
+                document.getElementById('cropHeightImageL1').value = parseInt(((h1PreviewShapes[clickedShapeIndex].x + (h1PreviewShapes[clickedShapeIndex].width / 2)) / this.width) * 100);
+            }
+            else if(h1PreviewShapes[clickedShapeIndex].name == 'top'){
+                h1PreviewShapes[clickedShapeIndex].y = Math.min(Math.max(parseInt(h1PreviewShapes[clickedShapeIndex].y + dy), 0 - (h1PreviewShapes[clickedShapeIndex].height / 2)), this.height - (h1PreviewShapes[clickedShapeIndex].height / 2));
+                document.getElementById('cropHeightImageT1').value = parseInt(((h1PreviewShapes[clickedShapeIndex].y + (h1PreviewShapes[clickedShapeIndex].height / 2)) / this.height) * 100);
+            }
+            else if(h1PreviewShapes[clickedShapeIndex].name == 'bottom'){
+                h1PreviewShapes[clickedShapeIndex].y = Math.min(Math.max(parseInt(h1PreviewShapes[clickedShapeIndex].y + dy), 0 - (h1PreviewShapes[clickedShapeIndex].height / 2)), this.height - (h1PreviewShapes[clickedShapeIndex].height / 2));
+                document.getElementById('cropHeightImageB1').value = parseInt((1 - ((h1PreviewShapes[clickedShapeIndex].y + (h1PreviewShapes[clickedShapeIndex].height / 2)) / this.height)) * 100);
+            }
+
+            updateHeightPreviewCanvas(1);
+        }
+        else if(this.id == 'customHeightPreviewCanvas2'){
+            if(h2PreviewShapes[clickedShapeIndex].name == 'right'){
+                h2PreviewShapes[clickedShapeIndex].x = Math.min(Math.max(parseInt(h2PreviewShapes[clickedShapeIndex].x + dx), 0 - (h2PreviewShapes[clickedShapeIndex].width / 2)), this.width - (h2PreviewShapes[clickedShapeIndex].width / 2));
+                document.getElementById('cropHeightImageR2').value = parseInt((1 - ((h2PreviewShapes[clickedShapeIndex].x + (h2PreviewShapes[clickedShapeIndex].width / 2)) / this.width)) * 100);
+            }
+            else if(h2PreviewShapes[clickedShapeIndex].name == 'left'){
+                h2PreviewShapes[clickedShapeIndex].x = Math.min(Math.max(parseInt(h2PreviewShapes[clickedShapeIndex].x + dx), 0 - (h2PreviewShapes[clickedShapeIndex].width / 2)), this.width - (h2PreviewShapes[clickedShapeIndex].width / 2));
+                document.getElementById('cropHeightImageL2').value = parseInt(((h2PreviewShapes[clickedShapeIndex].x + (h2PreviewShapes[clickedShapeIndex].width / 2)) / this.width) * 100);
+            }
+            else if(h2PreviewShapes[clickedShapeIndex].name == 'top'){
+                h2PreviewShapes[clickedShapeIndex].y = Math.min(Math.max(parseInt(h2PreviewShapes[clickedShapeIndex].y + dy), 0 - (h2PreviewShapes[clickedShapeIndex].height / 2)), this.height - (h2PreviewShapes[clickedShapeIndex].height / 2));
+                document.getElementById('cropHeightImageT2').value = parseInt(((h2PreviewShapes[clickedShapeIndex].y + (h2PreviewShapes[clickedShapeIndex].height / 2)) / this.height) * 100);
+            }
+            else if(h2PreviewShapes[clickedShapeIndex].name == 'bottom'){
+                h2PreviewShapes[clickedShapeIndex].y = Math.min(Math.max(parseInt(h2PreviewShapes[clickedShapeIndex].y + dy), 0 - (h2PreviewShapes[clickedShapeIndex].height / 2)), this.height - (h2PreviewShapes[clickedShapeIndex].height / 2));
+                document.getElementById('cropHeightImageB2').value = parseInt((1 - ((h2PreviewShapes[clickedShapeIndex].y + (h2PreviewShapes[clickedShapeIndex].height / 2)) / this.height)) * 100);
+            }
+            updateHeightPreviewCanvas(2);
+        }
+
+        //update new mouse position
+        startX = mouseX;
+        startY = mouseY;
+    }
+}
+
+function isMouseInShape(x, y, shape){
+    let shapeLeft = shape.x;
+    let shapeRight = shape.x + shape.width;
+    let shapeTop = shape.y;
+    let shapeBottom = shape.y + shape.height;
+
+    if (x > shapeLeft && x < shapeRight && y > shapeTop && y < shapeBottom){
+        return true;
+    }
+    
+    return false;
+}
+
+document.getElementById('customHeightPreviewCanvas1').onmousedown = mouseDownPreviewCanvas;
+document.getElementById('customHeightPreviewCanvas1').onmouseup = mouseUpPreviewCanvas;
+document.getElementById('customHeightPreviewCanvas1').onmouseout = mouseUpPreviewCanvas;
+document.getElementById('customHeightPreviewCanvas1').onmousemove = mouseMovePreviewCanvas;
+
+document.getElementById('customHeightPreviewCanvas2').onmousedown = mouseDownPreviewCanvas;
+document.getElementById('customHeightPreviewCanvas2').onmouseup = mouseUpPreviewCanvas;
+document.getElementById('customHeightPreviewCanvas2').onmouseout = mouseUpPreviewCanvas;
+document.getElementById('customHeightPreviewCanvas2').onmousemove = mouseMovePreviewCanvas;
 
 //---- Toolbox Functions ----------
 
