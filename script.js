@@ -1,9 +1,10 @@
- //-------- Global Variables -----------
- var charactersData;
+//-------- Global Variables -----------
+var charactersData;
+var useProxy = false;
 var corsProxyURL = 'https://corsproxy.io/?';  //add URLencoded: + encodeURIComponent('https://api.domain.com/...')
- //var corsProxyURL = "https://api.codetabs.com/v1/proxy?quest="; //old proxy
- var activeTab = "";
- var char1 = {
+//var corsProxyURL = "https://api.codetabs.com/v1/proxy?quest="; //old proxy
+var activeTab = "";
+var char1 = {
     "id": "blank",        
     "display_name": "Select a Character",
     "height": 0,
@@ -17,6 +18,28 @@ var corsProxyURL = 'https://corsproxy.io/?';  //add URLencoded: + encodeURICompo
     "height_correction": 1,
     "length": 0
 };
+
+function proxyCheck(){
+    if(!document.getElementById('proxyCheck').disabled){
+        var proxyElements = document.getElementsByClassName('proxyElement');
+        var proxyImages = document.getElementsByClassName('proxyImage');
+        
+        if(document.getElementById('proxyCheck').checked){
+            useProxy = true;
+            for (var i = 0; i < proxyElements.length; ++i) {
+                proxyElements[i].hidden = false;
+            }
+        }
+        else{
+            useProxy = false;
+            for (var i = 0; i < proxyImages.length; ++i) {
+                proxyElements[i].removeAttribute('crossorigin');
+            }
+        }
+    }
+
+    document.getElementById('proxyCheck').disabled = true;
+}
 
 //-------- Character Controls -----------------
 
@@ -149,12 +172,18 @@ function updateCharHeight(targetChar){
     
     //update image
     if((charData.id == "custom1" || charData.id == "custom2") && customLink != ''){
-        //add check to reduce proxy calls
-        if(heightImg.src != corsProxyURL + encodeURIComponent(customLink)){
-            heightImg.src = corsProxyURL + encodeURIComponent(customLink);
-            console.log('PROXY HIT');
+        //check if using proxy
+        if(useProxy){
+            //add check to reduce proxy calls
+            if(heightImg.src != corsProxyURL + encodeURIComponent(customLink)){
+                heightImg.src = corsProxyURL + encodeURIComponent(customLink);
+                console.log('PROXY HIT');
+            }
+            else{drawHeights();}
         }
-        else{drawHeights();}
+        else{
+            heightImg.src = customLink;
+        }
     }
     else{heightImg.src = "./images/height/" + charData.id + ".png";}
 }
@@ -231,7 +260,7 @@ function drawHeights(manualZoom = 0){
         canvas1.width, canvas1.height                         //size to scale placed image
     );
     
-    if(toFilterColor){filterFromCanvas(canvas1, filterR, filterG, filterB, tolerance)}
+    if(toFilterColor && useProxy){filterFromCanvas(canvas1, filterR, filterG, filterB, tolerance)}
 
     //draw character 2
     toFilterColor = false;
@@ -274,7 +303,7 @@ function drawHeights(manualZoom = 0){
         canvas2.width, canvas2.height                         //size to scale placed image
     );
 
-    if(toFilterColor){filterFromCanvas(canvas2, filterR, filterG, filterB, tolerance)}
+    if(toFilterColor && useProxy){filterFromCanvas(canvas2, filterR, filterG, filterB, tolerance)}
 }
 
 //adjust height canvas sizes based on character sizes
@@ -1015,6 +1044,14 @@ async function loadCharacters(){
     }
 }
 
+function prepPoxyElements(){
+    var proxyElements = document.getElementsByClassName('proxyElement');
+    for (var i = 0; i < proxyElements.length; ++i) {
+        proxyElements[i].hidden = true;
+    }
+}
+
+prepPoxyElements();
 loadCharacters();
 openTab('height');
 openCustomTab(1);

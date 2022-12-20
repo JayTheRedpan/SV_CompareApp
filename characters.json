@@ -438,5 +438,14 @@
         "ref_height": 180,
         "height_correction": 1,
         "length": 47
+    },
+    {
+        "id": "vera",
+        "display_name": "Vera",
+        "species": "pine martin",
+        "height": 194,
+        "ref_height": 194,
+        "height_correction": 1,
+        "length": 62
     }
 ]

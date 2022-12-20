@@ -22,12 +22,14 @@
             <option value="custom2">Custom 2</option>
         </select>
         <button id="swapButton" onclick="swapChars()"><i class='fa fa-refresh' style="font-size:35px;"></i></i></button>
+        <label for="proxyCheck">Enable Proxy For Imported URLs: </label>
+        <input type="checkbox" id="proxyCheck" onchange="proxyCheck()" checked>
     </div>
     
     <div class="tabButtons">
         <button id="heightButton" onclick="openTab('height'),updateCharacter(1, false),updateCharacter(2, false)"><i class="fa fa-arrows-v"></i>Height</button>
         <button id="lengthButton" onclick="openTab('length')"><i class="fa fa-arrows-h"></i>Length</button>
-        <button id="customButton" onclick="openTab('custom')"><i class="fa fa-user-o"></i>Custom</button>
+        <button id="customButton" onclick="openTab('custom'), proxyCheck()"><i class="fa fa-user-o"></i>Custom</button>
         <button id="profileButton" onclick="openTab('profile')"><i class="fa fa-address-card-o"></i>Profiles</button>
     </div>
 
@@ -36,12 +38,12 @@
         <div class="tab" id="heightTab">
             <input type="range" min="0.5" max = 10.5 value="1" id="zoomRange" onchange="adjustZoom()" />
             <input type="color" id="heightBGColor" value="#FAEBD7" oninput="updateHeightBG()"/>
-            <button id="copyHeightButton" onclick="getHeightImg(false)"><i class="fa fa-clone" aria-hidden="true"></i></button>
-            <button id="saveHeightButton" onclick="getHeightImg(true)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-            <label for="addHeightHeaderCheck">Add Header to Copy/Save:</label>
-            <input type="checkbox" id="addHeightHeaderCheck">
-            <label for="addHeightBGCheck">Add BG to Copy/Save:</label>
-            <input type="checkbox" id="addHeightBGCheck">
+            <button id="copyHeightButton" class="proxyElement" onclick="getHeightImg(false)"><i class="fa fa-clone" aria-hidden="true"></i></button>
+            <button id="saveHeightButton" class="proxyElement" onclick="getHeightImg(true)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+            <label for="addHeightHeaderCheck" class="proxyElement">Add Header to Copy/Save:</label>
+            <input type="checkbox" id="addHeightHeaderCheck" class="proxyElement">
+            <label for="addHeightBGCheck" class="proxyElement">Add BG to Copy/Save:</label>
+            <input type="checkbox" id="addHeightBGCheck" class="proxyElement">
             <table>
                 <colgroup>
                     <col span="1" style="width: 50%;" id="char1HeightCol">
@@ -59,11 +61,11 @@
                 </tr>
                 <tr class="heightImages">
                     <td id="height1ImgCell">
-                        <img src="./images/site/blank.png" alt="Character 1" id="height1Img" onload="drawHeights()" style="display: none" crossorigin="anonymous">
+                        <img src="./images/site/blank.png" alt="Character 1" class="proxyImage" id="height1Img" onload="drawHeights()" style="display: none" crossorigin="anonymous">
                         <canvas id="height1Canvas" width="1" height="1"></canvas>
                     </td>
                     <td id="height2ImgCell">
-                        <img src="./images/site/blank.png" alt="Character 2" id="height2Img" onload="drawHeights()" style="display: none" crossorigin="anonymous">
+                        <img src="./images/site/blank.png" alt="Character 2" class="proxyImage" id="height2Img" onload="drawHeights()" style="display: none" crossorigin="anonymous">
                         <canvas id="height2Canvas" width="1" height="1"></canvas>
                     </td>
                 </tr>
@@ -73,8 +75,8 @@
         <div class="tab" id="lengthTab" style="display:none;">
             <h2>Length Tab</h2>
             <div class="lengthImages">
-                <img src="./images/site/blank.png" alt="Character 1" id="length1img">
-                <img src="./images/site/blank.png" alt="Character 2" id="length2img">
+                <img src="./images/site/blank.png" alt="Character 1" class="proxyImage" id="length1img">
+                <img src="./images/site/blank.png" alt="Character 2" class="proxyImage" id="length2img">
             </div>
         </div>
 
@@ -144,13 +146,13 @@
                                 </div>
                                 
                                 <div class="inputPair">
-                                    <label for="removeBGColorCheck1">Remove BG</label>
-                                    <input type="checkbox" id="removeBGColorCheck1" disabled>
-                                    <input type="color" id="removeBGColor1" disabled>
+                                    <label for="removeBGColorCheck1" class="proxyElement">Remove BG</label>
+                                    <input type="checkbox" id="removeBGColorCheck1" class="proxyElement" disabled>
+                                    <input type="color" id="removeBGColor1" class="proxyElement" disabled>
                                 </div>
                                 <div class="inputPair">
-                                    <label for="removeTolerance1">Tolerance:</label>
-                                    <input type="number" value="10" id="removeTolerance1" disabled>
+                                    <label for="removeTolerance1" class="proxyElement">Tolerance:</label>
+                                    <input type="number" value="10" id="removeTolerance1" class="proxyElement" disabled>
                                 </div>
                             
                             </div>
@@ -217,13 +219,13 @@
                                 </div>
                                 
                                 <div class="inputPair">
-                                    <label for="removeBGColorCheck2">Remove BG</label>
-                                    <input type="checkbox" id="removeBGColorCheck2" disabled>
-                                    <input type="color" id="removeBGColor2" disabled>
+                                    <label for="removeBGColorCheck2" class="proxyElement">Remove BG</label>
+                                    <input type="checkbox" id="removeBGColorCheck2" class="proxyElement" disabled>
+                                    <input type="color" id="removeBGColor2" class="proxyElement" disabled>
                                 </div>
                                 <div class="inputPair">
-                                    <label for="removeTolerance2">Tolerance:</label>
-                                    <input type="number" value="10" id="removeTolerance2" disabled>
+                                    <label for="removeTolerance2" class="proxyElement">Tolerance:</label>
+                                    <input type="number" value="10" id="removeTolerance2" class="proxyElement" disabled>
                                 </div>
 
                             </div>
