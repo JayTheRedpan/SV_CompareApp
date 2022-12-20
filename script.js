@@ -19,6 +19,7 @@ var char1 = {
     "length": 0
 };
 
+//sets up use of proxy for manipulating canvas images, or removes them for faster app use
 function proxyCheck(){
     if(!document.getElementById('proxyCheck').disabled){
         var proxyElements = document.getElementsByClassName('proxyElement');
@@ -33,11 +34,12 @@ function proxyCheck(){
         else{
             useProxy = false;
             for (var i = 0; i < proxyImages.length; ++i) {
-                proxyElements[i].removeAttribute('crossorigin');
+                proxyImages[i].removeAttribute('crossorigin');
             }
         }
     }
 
+    //decision must be locked to avoid tainting canvases with non proxy use
     document.getElementById('proxyCheck').disabled = true;
 }
 
