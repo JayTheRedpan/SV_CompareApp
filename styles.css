@@ -6,7 +6,6 @@
 
 body{
     background-color: antiquewhite;
-    
 }
 
 .inputPair{
@@ -112,6 +111,24 @@ table {
     overflow-x: scroll;
 }
 
+/* -- Length Tab -- */
+
+#lengthHeadCell{
+    text-align: center; 
+    vertical-align: center;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+}
+
+#lengthImageCell{
+    text-align: left; 
+    vertical-align: center;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+}
+
 /* -- Custom Tab -- */
 
 .customTabButtons{
@@ -151,18 +168,18 @@ table {
     height: 500px;
 }
 
-.customHeightTab{
+.customHeightTab, .customLengthTab{
     display:flex;
     height: 100%;
 }
 
-.customHeightControls{
+.customHeightControls, .customLengthControls{
     display: block;
     width: 25%;
     height: 100%;
 }
 
-.customHeightControls input{
+.customHeightControls input, .customLengthControls input{
     border-radius: 5px;
 }
 
@@ -190,12 +207,12 @@ table {
 /* table {
     border: 3px double green;
     border-right-style: dashed;
-    border-left-width: 17px;
-    border-bottom-color: orange;
- }
- td {
+ } */
+ /* td {
     border-right-style: dotted;
     border-width: 3px;
     border-right-color: red;
+    border-bottom-style: dotted;
+    border-bottom-color: red;
     overflow: auto;
  } */

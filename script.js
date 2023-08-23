@@ -9,14 +9,16 @@ var char1 = {
     "display_name": "Select a Character",
     "height": 0,
     "height_correction": 1,
-    "length": 0
+    "length": 0,
+    "length_correction": 1
 };
  var char2 = {
     "id": "blank",        
     "display_name": "Select a Character",
     "height": 0,
     "height_correction": 1,
-    "length": 0
+    "length": 0,
+    "length_correction": 1
 };
 
 //sets up use of proxy for manipulating canvas images, or removes them for faster app use
@@ -63,7 +65,9 @@ function getChar(charID, log = true){
             "id":"custom1",
             "display_name": document.getElementById('customName1').value,
             "height": parseFloat(document.getElementById('customHeightFt1').value * 12) + parseFloat(document.getElementById('customHeightIn1').value),
-            "height_correction": parseFloat(document.getElementById('customHeightCorrect1').value) / 100
+            "height_correction": parseFloat(document.getElementById('customHeightCorrect1').value) / 100,
+            "length": parseFloat(document.getElementById('customLengthFt1').value * 12) + parseFloat(document.getElementById('customLengthIn1').value),
+            "length_correction": parseFloat(document.getElementById('customLengthCorrect1').value) / 100
         };
     }
     else if (charID == "custom2"){
@@ -71,7 +75,9 @@ function getChar(charID, log = true){
             "id":"custom2",
             "display_name": document.getElementById('customName2').value,
             "height": parseFloat(document.getElementById('customHeightFt2').value * 12) + parseFloat(document.getElementById('customHeightIn2').value),
-            "height_correction": parseFloat(document.getElementById('customHeightCorrect2').value) / 100
+            "height_correction": parseFloat(document.getElementById('customHeightCorrect2').value) / 100,
+            "length": parseFloat(document.getElementById('customLengthFt2').value * 12) + parseFloat(document.getElementById('customLengthIn2').value),
+            "length_correction": parseFloat(document.getElementById('customLengthCorrect2').value) / 100
         };
     }
     else {
@@ -119,7 +125,9 @@ function updateCharacter(targetChar, log = true){
     }
 
     //update character length images/stats
-
+    if(activeTab == "length"){
+        updateCharLength(targetChar);
+    }
     
     //update character profile images/stats
 
@@ -169,7 +177,7 @@ function updateCharHeight(targetChar){
     var customLink = document.getElementById(customElement).value;
 
     //update stats
-    document.getElementById('char' + targetChar +'Name').innerHTML = charData.display_name;
+    document.getElementById('char' + targetChar +'HeightName').innerHTML = charData.display_name;
     document.getElementById('char' + targetChar +'Height').innerHTML = inchesToText(charData.height);
     
     //update image
@@ -198,10 +206,6 @@ function drawHeights(manualZoom = 0){
     const ctx2 = canvas2.getContext("2d");
     var img1 = document.getElementById('height1Img');
     var img2 = document.getElementById('height2Img');
-    var cropTop;
-    var cropRight;
-    var cropBottom;
-    var cropLeft;
 
     //clear canvas
     ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
@@ -309,7 +313,7 @@ function drawHeights(manualZoom = 0){
 }
 
 //adjust height canvas sizes based on character sizes
-function scaleHeightCanvases(manualZoom){
+function scaleHeightCanvases(manualZoom = 0){
     var char1Height = char1.height * char1.height_correction;
     var char2Height = char2.height * char2.height_correction;
     const canvas1 = document.getElementById('height1Canvas');
@@ -337,7 +341,7 @@ function scaleHeightCanvases(manualZoom){
     else{zoom = 8;}
 
     //adjust canvas height based on character height and zoom
-    document.getElementById('zoomRange').value = zoom;
+    document.getElementById('heightZoomRange').value = zoom;
     canvas1.height = (zoom * char1Height);
     canvas2.height = (zoom * char2Height);
 
@@ -414,7 +418,7 @@ function adjustHeightWidths(){
     }
 }
 
-function adjustZoom(){
+function adjustHeightZoom(){
     var char1 = getChar(document.getElementById('char1select').value, false);
     var char2 = getChar(document.getElementById('char2select').value, false);
     var char1Height = 0;
@@ -434,7 +438,7 @@ function adjustZoom(){
     var height2img = document.getElementById('height2Img');
     var sizeScalar;
 
-    sizeScalar = document.getElementById('zoomRange').value;
+    sizeScalar = document.getElementById('heightZoomRange').value;
     height1img.style.height = (sizeScalar * char1Height) + 'px';
     height2img.style.height = (sizeScalar * char2Height) + 'px';
 
@@ -549,6 +553,334 @@ function getHeightImg(save = false){
 }
 //-------- Length Tab Stuff -----------------
 
+//updates character length tab
+function updateCharLength(targetChar){
+    //variable declaration
+    var charData;
+    var lengthHeadImg = document.getElementById('length' + targetChar +'HeadImg');
+    var lengthImg = document.getElementById('length' + targetChar +'Img');
+
+    if(targetChar == 1){charData = char1;}
+    else{charData = char2;}
+
+    //handle custom link
+    var customElement;
+    if (charData.id=="custom1"){customElement = 'customLengthImageURL1'}
+    else{customElement = 'customLengthImageURL2'}
+    var customLink = document.getElementById(customElement).value;
+
+    //update stats
+    document.getElementById('char' + targetChar +'LengthName').innerHTML = charData.display_name;
+    document.getElementById('char' + targetChar +'Length').innerHTML = inchesToText(charData.length);
+    
+    //update image
+    if((charData.id == "custom1" || charData.id == "custom2") && customLink != ''){
+        //check if using proxy
+        if(useProxy){
+            //add check to reduce proxy calls
+            if(lengthImg.src != corsProxyURL + encodeURIComponent(customLink)){
+                lengthImg.src = corsProxyURL + encodeURIComponent(customLink);
+                console.log('PROXY HIT');
+            }
+            else{drawLengths();}
+        }
+        else{
+            lengthImg.src = customLink;
+        }
+    }
+    else{
+        lengthImg.src = "./images/length/" + charData.id + ".png";
+    }
+
+    lengthHeadImg.src = "./images/head/" + charData.id + ".png"
+}
+
+//draw characters to lengthHead canvas elements from base images
+function drawHeadLengths(manualZoom = 0){
+    const canvas1 = document.getElementById('length1HeadCanvas');
+    const canvas2 = document.getElementById('length2HeadCanvas');
+    const container1 = document.getElementById('length1HeadImgCell');
+    const container2 = document.getElementById('length2HeadImgCell');
+    const ctx1 = canvas1.getContext("2d");
+    const ctx2 = canvas2.getContext("2d");
+    var img1 = document.getElementById('length1HeadImg');
+    var img2 = document.getElementById('length2HeadImg');
+
+    //clear canvas
+    ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+    ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+
+    //size canvases to character parent cell
+    canvas1.width = container1.clientWidth;
+    canvas1.height = (parseFloat(img1.height) / parseFloat(img1.width)) * parseFloat(canvas1.width);
+    canvas2.width = container2.clientWidth;
+    canvas2.height = (parseFloat(img2.height) / parseFloat(img2.width)) * parseFloat(canvas2.width);
+
+    //custom character crop values
+    var cropTop;
+    var cropRight;
+    var cropBottom;
+    var cropLeft;
+    var toFilterColor;
+    var filterR;
+    var filterG;
+    var filterB;
+    var tolerance;
+
+    //draw character 1
+    cropTop = 0;
+    cropRight = 0;
+    cropBottom = 0;
+    cropLeft = 0;
+
+    ctx1.drawImage(
+        img1,                                                 //image to draw
+        img1.width * cropLeft,                                //x to start grab
+        img1.height * cropTop,                                // y to start grab
+        img1.width - (img1.width * (cropLeft + cropRight)),   //x distance to grab
+        img1.height - (img1.height * (cropTop + cropBottom)), //y distance to grab
+        0, 0,                                                 //where to place image
+        canvas1.width, canvas1.height                         //size to scale placed image
+    );
+
+    ctx2.drawImage(
+        img2,                                                 //image to draw
+        img2.width * cropLeft,                                //x to start grab
+        img2.height * cropTop,                                // y to start grab
+        img2.width - (img2.width * (cropLeft + cropRight)),   //x distance to grab
+        img2.height - (img2.height * (cropTop + cropBottom)), //y distance to grab
+        0, 0,                                                 //where to place image
+        canvas2.width, canvas2.height                         //size to scale placed image
+    );
+}
+
+//draw characters to lengthHead canvas elements from base images
+function drawLengths(manualZoom = 0){
+    const canvas1 = document.getElementById('length1Canvas');
+    const canvas2 = document.getElementById('length2Canvas');
+    const ctx1 = canvas1.getContext("2d");
+    const ctx2 = canvas2.getContext("2d");
+    var img1 = document.getElementById('length1Img');
+    var img2 = document.getElementById('length2Img');
+
+    //clear canvas
+    ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+    ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+
+    //size canvases to character length
+    scaleLengthCanvases(manualZoom);
+
+    //custom character crop values
+    var cropTop;
+    var cropRight;
+    var cropBottom;
+    var cropLeft;
+    var flipImage;
+    var rotation;
+
+    //draw character 1
+    if (char1.id == 'custom1' && document.getElementById('customLengthImageURL1').value != ''){
+        cropTop = parseFloat(document.getElementById('cropLengthImageT1').value)/100;
+        cropRight = parseFloat(document.getElementById('cropLengthImageR1').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropLengthImageB1').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropLengthImageL1').value)/100;
+        flipImage = document.getElementById('flipLength1').checked;
+        rotation = parseFloat(document.getElementById('rotateLength1').value);
+    }
+    else if (char1.id == 'custom2' && document.getElementById('customLengthImageURL2').value != ''){
+        cropTop = parseFloat(document.getElementById('cropLengthImageT2').value)/100;
+        cropRight = parseFloat(document.getElementById('cropLengthImageR2').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropLengthImageB2').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropLengthImageL2').value)/100;
+        flipImage = document.getElementById('flipLength2').checked;
+        rotation = parseFloat(document.getElementById('rotateLength2').value);
+    }
+    else{
+        cropTop = 0;
+        cropRight = 0;
+        cropBottom = 0;
+        cropLeft = 0;
+        flipImage = false;
+        rotation = 0;
+    }
+    
+    imageToCanvas(img1, canvas1, cropTop, cropRight, cropBottom, cropLeft, flipImage, rotation, false);
+
+    // ctx1.drawImage(
+    //     img1,                                                 //image to draw
+    //     img1.width * cropLeft,                                //x to start grab
+    //     img1.height * cropTop,                                // y to start grab
+    //     img1.width - (img1.width * (cropLeft + cropRight)),   //x distance to grab
+    //     img1.height - (img1.height * (cropTop + cropBottom)), //y distance to grab
+    //     0, 0,                                                 //where to place image
+    //     canvas1.width, canvas1.height                         //size to scale placed image
+    // );
+
+    //draw character 2
+    if (char2.id == 'custom1' && document.getElementById('customLengthImageURL1').value != ''){
+        cropTop = parseFloat(document.getElementById('cropLengthImageT1').value)/100;
+        cropRight = parseFloat(document.getElementById('cropLengthImageR1').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropLengthImageB1').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropLengthImageL1').value)/100;
+        flipImage = document.getElementById('flipLength1').checked;
+    }
+    else if (char2.id == 'custom2' && document.getElementById('customLengthImageURL2').value != ''){
+        cropTop = parseFloat(document.getElementById('cropLengthImageT2').value)/100;
+        cropRight = parseFloat(document.getElementById('cropLengthImageR2').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropLengthImageB2').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropLengthImageL2').value)/100;
+        flipImage = document.getElementById('flipLength2').checked;
+    }
+    else{
+        cropTop = 0;
+        cropRight = 0;
+        cropBottom = 0;
+        cropLeft = 0;
+        flipImage = false;
+        rotation = 0;
+    }
+
+    imageToCanvas(img2, canvas2, cropTop, cropRight, cropBottom, cropLeft, flipImage, 0, false);
+
+    // ctx2.drawImage(
+    //     img2,                                                 //image to draw
+    //     img2.width * cropLeft,                                //x to start grab
+    //     img2.height * cropTop,                                // y to start grab
+    //     img2.width - (img2.width * (cropLeft + cropRight)),   //x distance to grab
+    //     img2.height - (img2.height * (cropTop + cropBottom)), //y distance to grab
+    //     0, 0,                                                 //where to place image
+    //     canvas2.width, canvas2.height                         //size to scale placed image
+    // );
+}
+
+//adjust length canvas sizes based on character sizes
+function scaleLengthCanvases(manualZoom = 0){
+    var char1Length = char1.length * char1.length_correction;
+    var char2Length = char2.length * char2.length_correction;
+    const canvas1 = document.getElementById('length1Canvas');
+    const canvas2 = document.getElementById('length2Canvas');
+    var img1 = document.getElementById('length1Img');
+    var img2 = document.getElementById('length2Img');
+    var maxSize;
+    var zoom;
+
+    //update images if using custom
+    // if(char1.id == 'custom1' && document.getElementById('customLengthImageURL1').value != ''){img1 = customImage1;}
+    // else if(char1.id == 'custom2' && document.getElementById('customLengthImageURL2').value != ''){img1 = customImage2;}
+    // else if(char2.id == 'custom1' && document.getElementById('customLengthImageURL1').value != ''){img2 = customImage1;}
+    // else if(char2.id == 'custom2' && document.getElementById('customLengthImageURL2').value != ''){img2 = customImage1;}
+
+    //find larger characters length
+    if (char1Length > char2Length){maxSize = char1Length;}
+    else{maxSize = char2Length;}
+
+    //calculate zoom based off of bigger character length
+    if (manualZoom != 0) {zoom = manualZoom}
+    else if (maxSize >= 300){zoom = 1;}
+    else if (maxSize >= 100){zoom = 4;}
+    else if (maxSize >= 40){zoom = 12;}
+    else if (maxSize >= 20){zoom = 25;}
+    else if (maxSize >= 10){zoom = 40;}
+    else{zoom = 50;}
+
+    //adjust canvas length based on character length and zoom
+    document.getElementById('lengthZoomRange').value = zoom;
+    canvas1.width = (zoom * char1Length);
+    canvas2.width = (zoom * char2Length);
+
+    //adjust canvas heights to maintain aspect ratio
+    var cropTop;
+    var cropRight;
+    var cropBottom;
+    var cropLeft;
+
+    //canvas 1
+    if (char1.id == 'custom1'){
+        cropTop = parseFloat(document.getElementById('cropLengthImageT1').value)/100;
+        cropRight = parseFloat(document.getElementById('cropLengthImageR1').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropLengthImageB1').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropLengthImageL1').value)/100;
+    }
+    else if (char1.id == 'custom2'){
+        cropTop = parseFloat(document.getElementById('cropLengthImageT2').value)/100;
+        cropRight = parseFloat(document.getElementById('cropLengthImageR2').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropLengthImageB2').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropLengthImageL2').value)/100;
+    }
+    else{
+        cropTop = 0;
+        cropRight = 0;
+        cropBottom = 0;
+        cropLeft = 0;
+    }
+    
+    canvas1.height = (parseFloat(img1.height - (img1.height * (cropTop + cropBottom)))/parseFloat(img1.width - (img1.width * (cropLeft + cropRight)))) * parseFloat(canvas1.width);
+
+     //canvas 1
+     if (char2.id == 'custom1'){
+        cropTop = parseFloat(document.getElementById('cropLengthImageT1').value)/100;
+        cropRight = parseFloat(document.getElementById('cropLengthImageR1').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropLengthImageB1').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropLengthImageL1').value)/100;
+    }
+    else if (char2.id == 'custom2'){
+        cropTop = parseFloat(document.getElementById('cropLengthImageT2').value)/100;
+        cropRight = parseFloat(document.getElementById('cropLengthImageR2').value)/100;
+        cropBottom = parseFloat(document.getElementById('cropLengthImageB2').value)/100;
+        cropLeft = parseFloat(document.getElementById('cropLengthImageL2').value)/100;
+    }
+    else{
+        cropTop = 0;
+        cropRight = 0;
+        cropBottom = 0;
+        cropLeft = 0;
+    }
+    
+    canvas2.height = (parseFloat(img2.height - (img2.height * (cropTop + cropBottom)))/parseFloat(img2.width - (img2.width * (cropLeft + cropRight)))) * parseFloat(canvas2.width);
+}
+
+function adjustLengthZoom(){
+    var char1 = getChar(document.getElementById('char1select').value, false);
+    var char2 = getChar(document.getElementById('char2select').value, false);
+    var char1Length = 0;
+    var char2Length = 0;
+
+    // try{
+    //     char1Length = char1.length * char1.length_correction;
+    // }catch{
+
+    // }
+    // try{
+    //     char2Length = char2.length * char2.length_correction;
+    // }catch{
+
+    // }
+    var length1img = document.getElementById('length1Img');
+    var length2img = document.getElementById('length2Img');
+    var sizeScalar;
+
+    sizeScalar = document.getElementById('lengthZoomRange').value;
+    length1img.style.length = (sizeScalar * char1Length) + 'px';
+    length2img.style.length = (sizeScalar * char2Length) + 'px';
+
+    drawLengths(sizeScalar);
+
+    console.log('Scaled by: ' + sizeScalar);
+}
+
+function updateLengthBG(){
+    const bgColor = document.getElementById('lengthBGColor').value;
+    const bg1 = document.getElementById('length1ImgCell');
+    const bgh1 = document.getElementById('length1HeadImgCell');
+    const bg2 = document.getElementById('length2ImgCell');
+    const bgh2 = document.getElementById('length2HeadImgCell');
+
+    bg1.style.backgroundColor = bgColor;
+    //bgh1.style.backgroundColor = bgColor;
+
+    bg2.style.backgroundColor = bgColor;
+    //bgh2.style.backgroundColor = bgColor;
+}
 
 //-------- Profile Tab Stuff -----------------
 
@@ -556,6 +888,8 @@ function getHeightImg(save = false){
 //-------- Custom Tab Stuff -----------------
 var h1PreviewShapes = [];
 var h2PreviewShapes = [];
+var l1PreviewShapes = [];
+var l2PreviewShapes = [];
 var clickedShapeIndex = 0;
 var startX = 0;
 var startY = 0;
@@ -607,16 +941,19 @@ function adjustCrop(cropChar, cropImage, cropDimension){
     //update control shapes if triggered from input boxes
     if (cropChar == 1 && cropImage == 'Height'){h1PreviewShapes = updateShapes(h1PreviewShapes, parseInt(topCropInput.value), parseInt(rightCropInput.value), parseInt(bottomCropInput.value), parseInt(leftCropInput.value), canvas);}
     else if (cropChar == 2 && cropImage == 'Height'){h2PreviewShapes = updateShapes(h2PreviewShapes, parseInt(topCropInput.value), parseInt(rightCropInput.value), parseInt(bottomCropInput.value), parseInt(leftCropInput.value), canvas);}
+    else if (cropChar == 1 && cropImage == 'Length'){l1PreviewShapes = updateShapes(l1PreviewShapes, parseInt(topCropInput.value), parseInt(rightCropInput.value), parseInt(bottomCropInput.value), parseInt(leftCropInput.value), canvas);}
+    else if (cropChar == 2 && cropImage == 'Length'){l2PreviewShapes = updateShapes(l2PreviewShapes, parseInt(topCropInput.value), parseInt(rightCropInput.value), parseInt(bottomCropInput.value), parseInt(leftCropInput.value), canvas);}
 
     //update appropriate preview image
     if(cropImage == 'Height'){updateHeightPreviewCanvas(cropChar);}
+    else if(cropImage == 'Length'){updateLengthPreviewCanvas(cropChar);}
 }
 
 function updateHeightPreviewCanvas(targetCanv, resetControls = false){
     const canvas = document.getElementById('customHeightPreviewCanvas' + targetCanv);
     const ctx = canvas.getContext('2d');
     const customLink = document.getElementById('customHeightImageURL' + targetCanv).value;
-    const container = document.getElementById('customCanvasContainer' + targetCanv);
+    const container = document.getElementById('customCanvasContainerH' + targetCanv);
 
     //reset controls if new image
     if(resetControls){
@@ -747,6 +1084,147 @@ function updateHeightPreviewCanvas(targetCanv, resetControls = false){
 
 }
 
+function updateLengthPreviewCanvas(targetCanv, resetControls = false){
+    const canvas = document.getElementById('customLengthPreviewCanvas' + targetCanv);
+    const ctx = canvas.getContext('2d');
+    const customLink = document.getElementById('customLengthImageURL' + targetCanv).value;
+    const container = document.getElementById('customCanvasContainerL' + targetCanv);
+
+    //reset controls if new image
+    if(resetControls){
+        //reset crop fields
+        document.getElementById('cropLengthImageT' + targetCanv).value = 0;
+        document.getElementById('cropLengthImageR' + targetCanv).value = 0;
+        document.getElementById('cropLengthImageB' + targetCanv).value = 0;
+        document.getElementById('cropLengthImageL' + targetCanv).value = 0;
+
+        //reset background filtering
+        // document.getElementById('removeBGColorCheck'  + targetCanv).checked = false;
+        // document.getElementById('removeTolerance'  + targetCanv).value = 10;
+    }
+
+    var cropTop = parseFloat(document.getElementById('cropLengthImageT' + targetCanv).value)/100;
+    var cropRight = parseFloat(document.getElementById('cropLengthImageR' + targetCanv).value)/100;
+    var cropBottom = parseFloat(document.getElementById('cropLengthImageB' + targetCanv).value)/100;
+    var cropLeft = parseFloat(document.getElementById('cropLengthImageL' + targetCanv).value)/100;
+
+    //drawing image to preview canvas
+    var img = new Image();
+    img.onload = function () {
+        // resize preview canvas based on image dimensions.  
+        // Determine its biggest dimension, then scale the canvas to it inside the div
+        if(img.width > img.height){
+            canvas.width = container.clientWidth;
+            canvas.height = (parseFloat(img.height) / parseFloat(img.width)) * parseFloat(canvas.width);
+        }
+        else{
+            canvas.height = container.clientHeight;
+            canvas.width = (parseFloat(img.width) / parseFloat(img.height)) * parseFloat(canvas.height);
+        }
+        //check for overflow
+        while(canvas.height > container.clientHeight || canvas.width > container.clientWidth){
+            canvas.width *= 0.99;
+            canvas.height *= 0.99;
+        }
+
+        //enable image controls
+        document.getElementById('cropLengthImageT' + targetCanv).disabled = false;
+        document.getElementById('cropLengthImageR' + targetCanv).disabled = false;
+        document.getElementById('cropLengthImageB' + targetCanv).disabled = false;
+        document.getElementById('cropLengthImageL' + targetCanv).disabled = false;
+        document.getElementById('customLengthCorrect' + targetCanv).disabled = false;
+        document.getElementById('flipLength' + targetCanv).disabled = false;
+        document.getElementById('rotateLength' + targetCanv).disabled = false;
+        // document.getElementById('removeBGColorCheck' + targetCanv).disabled = false;
+        // document.getElementById('removeBGColor' + targetCanv).disabled = false;
+        // document.getElementById('removeTolerance' + targetCanv).disabled = false;
+
+        //if this is a new image, create control shapes
+        if(targetCanv == 1 && l1PreviewShapes.length == 0){l1PreviewShapes = createControlShapes(canvas);}
+        else if(targetCanv == 2 && l2PreviewShapes.length == 0){l2PreviewShapes = createControlShapes(canvas);}
+
+        //draw image to preview canvas
+        ctx.drawImage(
+            img,                            //image to draw
+            0, 0,                           //x y to start grab
+            img.width, img.height,          //x y distance to grab
+            0, 0,                           //where to place image
+            canvas.width, canvas.height   //size to scale placed image
+        );
+
+        //draw crop rectangles to prevew canvas
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height * cropTop);  //top crop
+        ctx.fillRect(canvas.width - (canvas.width * cropRight), 0, canvas.width * cropRight, canvas.height);  //right crop
+        ctx.fillRect(0, canvas.height - (canvas.height * cropBottom), canvas.width, canvas.height * cropBottom);  //bottom crop
+        ctx.fillRect(0, 0, canvas.width * cropLeft, canvas.height);  //left crop
+
+        //draw lines over crop box edges
+        ctx.beginPath();
+        ctx.moveTo(canvas.width * cropLeft, canvas.height * cropTop); //left top
+        ctx.lineTo(canvas.width - (canvas.width * cropRight), canvas.height * cropTop); //right top
+        ctx.lineTo(canvas.width - (canvas.width * cropRight), canvas.height - (canvas.height * cropBottom)); //right bottom
+        ctx.lineTo(canvas.width * cropLeft, canvas.height - (canvas.height * cropBottom)); //left bottom
+        ctx.lineTo(canvas.width * cropLeft, canvas.height * cropTop); //left top
+        ctx.strokeStyle = '#ff0000'; //color
+        ctx.lineWidth = 2; //width
+        ctx.stroke();  //draw to canvas
+
+        //draw control shapes
+        if(targetCanv == 1){drawShapesToCanvas(l1PreviewShapes, canvas);}
+        else{drawShapesToCanvas(l2PreviewShapes, canvas);}
+    };
+    
+    //handle bad image links
+    img.onerror = function () {
+        //reset canvas size
+        canvas.width = container.clientWidth * 0.95;
+        canvas.height = container.clientHeight * 0.95;
+        
+        //clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        //tell user it was a bad url
+        ctx.font = Math.round(0.04 * canvas.height) + "px Arial";
+        ctx.fillStyle = "red";
+        ctx.textAlign = "center";
+        ctx.fillText("Bad Image URL", canvas.width/2, canvas.height/2);
+
+        //remove control shapes
+        if(targetCanv ==1){l1PreviewShapes = [];}
+        else{l2PreviewShapes = [];}
+
+        //blank url
+        document.getElementById('customLengthImageURL' + targetCanv).value = '';
+
+        //reset image controls
+        document.getElementById('cropLengthImageT' + targetCanv).value = 0;
+        document.getElementById('cropLengthImageR' + targetCanv).value = 0;
+        document.getElementById('cropLengthImageB' + targetCanv).value = 0;
+        document.getElementById('cropLengthImageL' + targetCanv).value = 0;
+        document.getElementById('customLengthCorrect' + targetCanv).value = 100;
+        document.getElementById('flipLength' + targetCanv).checked = false;
+        document.getElementById('rotateLength' + targetCanv).value = 0;
+        //document.getElementById('removeBGColorCheck'  + targetCanv).checked = false;
+        //document.getElementById('removeTolerance'  + targetCanv).value = 10;
+
+        //disable image controls
+        document.getElementById('cropLengthImageT' + targetCanv).disabled = true;
+        document.getElementById('cropLengthImageR' + targetCanv).disabled = true;
+        document.getElementById('cropLengthImageB' + targetCanv).disabled = true;
+        document.getElementById('cropLengthImageL' + targetCanv).disabled = true;
+        document.getElementById('customLengthCorrect' + targetCanv).disabled = true;
+        document.getElementById('flipLength' + targetCanv).disabled = true;
+        document.getElementById('rotateLength' + targetCanv).disabled = true;
+        //document.getElementById('removeBGColorCheck' + targetCanv).disabled = true;
+        //document.getElementById('removeBGColor' + targetCanv).disabled = true;
+        //document.getElementById('removeTolerance' + targetCanv).disabled = true;
+    }
+
+    img.src = customLink;
+
+}
+
 function createControlShapes(canvas){
     const shapes = [];
     const shapeSize = Math.max(canvas.width, canvas.height) * 0.04;
@@ -792,11 +1270,14 @@ function updateShapes(shapes, top, right, bottom, left, canvas){
 }
 
 function drawShapesToCanvas(shapes, canvas){
-    ctx = canvas.getContext("2d");
-    
-    for(let shape of shapes){
-        ctx.fillStyle = shape.color;
-        ctx.fillRect(shape.x, shape.y, shape.width, shape.height);
+    if(!isDragging)
+        {
+        ctx = canvas.getContext("2d");
+        
+        for(let shape of shapes){
+            ctx.fillStyle = shape.color;
+            ctx.fillRect(shape.x, shape.y, shape.width, shape.height);
+        }
     }
 }
 
@@ -806,6 +1287,8 @@ let mouseDownPreviewCanvas = function(event){
 
     if(this.id == 'customHeightPreviewCanvas1'){shapes = h1PreviewShapes;}
     else if(this.id == 'customHeightPreviewCanvas2'){shapes = h2PreviewShapes;}
+    else if(this.id == 'customLengthPreviewCanvas1'){shapes = l1PreviewShapes;}
+    else if(this.id == 'customLengthPreviewCanvas2'){shapes = l2PreviewShapes;}
 
     const rect = this.getBoundingClientRect();
     startX = parseInt(event.clientX) - rect.left;
@@ -833,6 +1316,8 @@ let mouseUpPreviewCanvas = function(event){
     //update controlshapes for each preview canvas by just triggering the input box function
     if(this.id == 'customHeightPreviewCanvas1' && document.getElementById('customHeightImageURL1').value != ''){adjustCrop(1, 'Height', 'T');}
     else if(this.id == 'customHeightPreviewCanvas2' && document.getElementById('customHeightImageURL2').value != ''){adjustCrop(2, 'Height', 'T');}
+    else if(this.id == 'customLengthPreviewCanvas1' && document.getElementById('customLengthImageURL1').value != ''){adjustCrop(1, 'Length', 'T');}
+    else if(this.id == 'customLengthPreviewCanvas2' && document.getElementById('customLengthImageURL2').value != ''){adjustCrop(2, 'Length', 'T');}
 }
 
 let mouseMovePreviewCanvas = function(event){
@@ -891,6 +1376,47 @@ let mouseMovePreviewCanvas = function(event){
             }
             updateHeightPreviewCanvas(2);
         }
+        else if(this.id == 'customLengthPreviewCanvas1'){
+            //update appropriate shape with mouse delta, and its corresponding input box
+            if(l1PreviewShapes[clickedShapeIndex].name == 'right'){
+                l1PreviewShapes[clickedShapeIndex].x = Math.min(Math.max(parseInt(l1PreviewShapes[clickedShapeIndex].x + dx), 0 - (l1PreviewShapes[clickedShapeIndex].width / 2)), this.width - (l1PreviewShapes[clickedShapeIndex].width / 2));
+                document.getElementById('cropLengthImageR1').value = parseInt((1 - ((l1PreviewShapes[clickedShapeIndex].x + (l1PreviewShapes[clickedShapeIndex].width / 2)) / this.width)) * 100);
+            
+            }
+            else if(l1PreviewShapes[clickedShapeIndex].name == 'left'){
+                l1PreviewShapes[clickedShapeIndex].x = Math.min(Math.max(parseInt(l1PreviewShapes[clickedShapeIndex].x + dx), 0 - (l1PreviewShapes[clickedShapeIndex].width / 2)), this.width - (l1PreviewShapes[clickedShapeIndex].width / 2));
+                document.getElementById('cropLengthImageL1').value = parseInt(((l1PreviewShapes[clickedShapeIndex].x + (l1PreviewShapes[clickedShapeIndex].width / 2)) / this.width) * 100);
+            }
+            else if(l1PreviewShapes[clickedShapeIndex].name == 'top'){
+                l1PreviewShapes[clickedShapeIndex].y = Math.min(Math.max(parseInt(l1PreviewShapes[clickedShapeIndex].y + dy), 0 - (l1PreviewShapes[clickedShapeIndex].height / 2)), this.height - (l1PreviewShapes[clickedShapeIndex].height / 2));
+                document.getElementById('cropLengthImageT1').value = parseInt(((l1PreviewShapes[clickedShapeIndex].y + (l1PreviewShapes[clickedShapeIndex].height / 2)) / this.height) * 100);
+            }
+            else if(l1PreviewShapes[clickedShapeIndex].name == 'bottom'){
+                l1PreviewShapes[clickedShapeIndex].y = Math.min(Math.max(parseInt(l1PreviewShapes[clickedShapeIndex].y + dy), 0 - (l1PreviewShapes[clickedShapeIndex].height / 2)), this.height - (l1PreviewShapes[clickedShapeIndex].height / 2));
+                document.getElementById('cropLengthImageB1').value = parseInt((1 - ((l1PreviewShapes[clickedShapeIndex].y + (l1PreviewShapes[clickedShapeIndex].height / 2)) / this.height)) * 100);
+            }
+
+            updateLengthPreviewCanvas(1);
+        }
+        else if(this.id == 'customLengthPreviewCanvas2'){
+            if(l2PreviewShapes[clickedShapeIndex].name == 'right'){
+                l2PreviewShapes[clickedShapeIndex].x = Math.min(Math.max(parseInt(l2PreviewShapes[clickedShapeIndex].x + dx), 0 - (l2PreviewShapes[clickedShapeIndex].width / 2)), this.width - (l2PreviewShapes[clickedShapeIndex].width / 2));
+                document.getElementById('cropLengthImageR2').value = parseInt((1 - ((l2PreviewShapes[clickedShapeIndex].x + (l2PreviewShapes[clickedShapeIndex].width / 2)) / this.width)) * 100);
+            }
+            else if(l2PreviewShapes[clickedShapeIndex].name == 'left'){
+                l2PreviewShapes[clickedShapeIndex].x = Math.min(Math.max(parseInt(l2PreviewShapes[clickedShapeIndex].x + dx), 0 - (l2PreviewShapes[clickedShapeIndex].width / 2)), this.width - (l2PreviewShapes[clickedShapeIndex].width / 2));
+                document.getElementById('cropLengthImageL2').value = parseInt(((l2PreviewShapes[clickedShapeIndex].x + (l2PreviewShapes[clickedShapeIndex].width / 2)) / this.width) * 100);
+            }
+            else if(l2PreviewShapes[clickedShapeIndex].name == 'top'){
+                l2PreviewShapes[clickedShapeIndex].y = Math.min(Math.max(parseInt(l2PreviewShapes[clickedShapeIndex].y + dy), 0 - (l2PreviewShapes[clickedShapeIndex].height / 2)), this.height - (l2PreviewShapes[clickedShapeIndex].height / 2));
+                document.getElementById('cropLengthImageT2').value = parseInt(((l2PreviewShapes[clickedShapeIndex].y + (l2PreviewShapes[clickedShapeIndex].height / 2)) / this.height) * 100);
+            }
+            else if(l2PreviewShapes[clickedShapeIndex].name == 'bottom'){
+                l2PreviewShapes[clickedShapeIndex].y = Math.min(Math.max(parseInt(l2PreviewShapes[clickedShapeIndex].y + dy), 0 - (l2PreviewShapes[clickedShapeIndex].height / 2)), this.height - (l2PreviewShapes[clickedShapeIndex].height / 2));
+                document.getElementById('cropLengthImageB2').value = parseInt((1 - ((l2PreviewShapes[clickedShapeIndex].y + (l2PreviewShapes[clickedShapeIndex].height / 2)) / this.height)) * 100);
+            }
+            updateLengthPreviewCanvas(2);
+        }
 
         //update new mouse position
         startX = mouseX;
@@ -911,15 +1437,35 @@ function isMouseInShape(x, y, shape){
     return false;
 }
 
+// ---- Add Event Listeners ------------
+
 document.getElementById('customHeightPreviewCanvas1').onmousedown = mouseDownPreviewCanvas;
+document.getElementById('customHeightPreviewCanvas1').addEventListener('touchstart', function(event) {mouseDownPreviewCanvas;});
 document.getElementById('customHeightPreviewCanvas1').onmouseup = mouseUpPreviewCanvas;
+document.getElementById('customHeightPreviewCanvas1').addEventListener('touchend', function(event) {mouseUpPreviewCanvas;});
 document.getElementById('customHeightPreviewCanvas1').onmouseout = mouseUpPreviewCanvas;
 document.getElementById('customHeightPreviewCanvas1').onmousemove = mouseMovePreviewCanvas;
 
 document.getElementById('customHeightPreviewCanvas2').onmousedown = mouseDownPreviewCanvas;
+document.getElementById('customHeightPreviewCanvas2').addEventListener('touchstart', function(event) {mouseDownPreviewCanvas;});
 document.getElementById('customHeightPreviewCanvas2').onmouseup = mouseUpPreviewCanvas;
+document.getElementById('customHeightPreviewCanvas2').addEventListener('touchend', function(event) {mouseUpPreviewCanvas;});
 document.getElementById('customHeightPreviewCanvas2').onmouseout = mouseUpPreviewCanvas;
 document.getElementById('customHeightPreviewCanvas2').onmousemove = mouseMovePreviewCanvas;
+
+document.getElementById('customLengthPreviewCanvas1').onmousedown = mouseDownPreviewCanvas;
+document.getElementById('customLengthPreviewCanvas1').addEventListener('touchstart', function(event) {mouseDownPreviewCanvas;});
+document.getElementById('customLengthPreviewCanvas1').onmouseup = mouseUpPreviewCanvas;
+document.getElementById('customLengthPreviewCanvas1').addEventListener('touchend', function(event) {mouseUpPreviewCanvas;});
+document.getElementById('customLengthPreviewCanvas1').onmouseout = mouseUpPreviewCanvas;
+document.getElementById('customLengthPreviewCanvas1').onmousemove = mouseMovePreviewCanvas;
+
+document.getElementById('customLengthPreviewCanvas2').onmousedown = mouseDownPreviewCanvas;
+document.getElementById('customLengthPreviewCanvas2').addEventListener('touchstart', function(event) {mouseDownPreviewCanvas;});
+document.getElementById('customLengthPreviewCanvas2').onmouseup = mouseUpPreviewCanvas;
+document.getElementById('customLengthPreviewCanvas2').addEventListener('touchend', function(event) {mouseUpPreviewCanvas;});
+document.getElementById('customLengthPreviewCanvas2').onmouseout = mouseUpPreviewCanvas;
+document.getElementById('customLengthPreviewCanvas2').onmousemove = mouseMovePreviewCanvas;
 
 //---- Toolbox Functions ----------
 
@@ -971,18 +1517,43 @@ function canvasToBlob(canvas){
     })
 }
 
-function imageToCanvas(img, canvas){
+function imageToCanvas(img, canvas, cropTop = 0, cropRight = 0, cropBottom = 0, cropLeft = 0, flipImage = false, rotateImage = 0, scaleCanvasToImage = false){
     const ctx = canvas.getContext("2d");
 
     //clear canvas
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     //size canvas to image size
-    canvas.height = img.height;
-    canvas.width = img.width;
+    if(scaleCanvasToImage){
+        canvas.height = img.height;
+        canvas.width = img.width;
+    }
 
     //draw image to canvas
-    ctx.drawImage(img, 0, 0);
+    ctx.globalCompositeOperation = 'copy';                      //keeps alpha channel
+
+    if(flipImage){
+        ctx.scale(-1, 1);                                       //
+        ctx.translate(-canvas.width, 0);                        //
+    }
+
+    if (rotateImage > 0) {
+        const radians = (rotateImage * Math.PI) / 180;          //convert from degrees to radians
+        ctx.translate(canvas.width / 2, canvas.height / 2);     //move to middle of canvas
+        ctx.rotate(radians);                                    //rotate context
+    }
+
+    ctx.drawImage(
+        img,                                                    //image to draw
+        img.width * cropLeft,                                   //image x to start grab
+        img.height * cropTop,                                   //image y to start grab
+        img.width - (img.width * (cropLeft + cropRight)),       //image x distance to grab
+        img.height - (img.height * (cropTop + cropBottom)),     //image y distance to grab
+        0,                                                      //canvas x to place image
+        0,                                                      //canvas y to place image
+        canvas.width,                                           //image width on canvas
+        canvas.height                                           //image heigh on canvas
+    );
 }
 
 function inchesToText(inches){
