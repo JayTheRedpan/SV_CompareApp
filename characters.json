@@ -524,5 +524,16 @@
         "height_correction": 1,
         "length": 8,
         "length_correction": 1
+    },
+    {
+        "id": "riley",
+        "display_name": "Riley",
+        "species": "red panda racoon hybrid",
+        "height": 150,
+        "ref_height": 150,
+        "height_correction": 1,
+        "length": 53,
+        "length_correction": 1
     }
+]
 ]
