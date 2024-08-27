@@ -533,6 +533,6 @@
         "ref_height": 150,
         "height_correction": 1,
         "length": 53,
-        "length_correction": 1
+        "length_correction": 0.5
     }
 ]
